@@ -62,7 +62,7 @@ public class CustumAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	Algorithm algotithm=Algorithm.HMAC256("secret".getBytes());
 	String access_Token=JWT.create()
 			.withSubject(user.getUsername())
-			.withExpiresAt(new Date(System.currentTimeMillis() +10 *60*1000))
+			.withExpiresAt(new Date(System.currentTimeMillis() +1000 *60*1000))
 			.withIssuer(request.getRequestURL().toString())
 			.withClaim("roles",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 			.sign(algotithm);
@@ -70,7 +70,7 @@ public class CustumAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	/* ========================= refresh token ==========================*/
 	String refresh_Token=JWT.create()
 			.withSubject(user.getUsername())
-			.withExpiresAt(new Date(System.currentTimeMillis() +30 *60*1000))
+			.withExpiresAt(new Date(System.currentTimeMillis() +3000 *60*1000))
 			.withIssuer(request.getRequestURL().toString())
 			.sign(algotithm);
 	/*========================== end refresh token ======================*/

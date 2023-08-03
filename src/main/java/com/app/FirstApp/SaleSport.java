@@ -2,10 +2,7 @@ package com.app.FirstApp;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import com.app.FirstApp.domain.acteur.Acteur;
 import com.app.FirstApp.domain.depot.Depot;
@@ -34,6 +31,9 @@ import com.app.FirstApp.domain.role.Role;
 import com.app.FirstApp.domain.user.User;
 import com.app.FirstApp.services.userRole.UserService;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -45,16 +45,7 @@ public class SaleSport {
 	public static void main(String[] args) {
 		SpringApplication.run(SaleSport.class, args);
 	}
-	@Bean
-	public WebMvcConfigurer corsConfigurer() {
-		return new WebMvcConfigurerAdapter() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("PUT", "DELETE",
-						"GET", "POST");
-			}
-		};
-	}
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -65,7 +56,7 @@ public class SaleSport {
 			//userService.saveRole(new Role("Add"));
 			//userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "12356sdf", new ArrayList<>()));
 		
-			List<Role> roles =new ArrayList<>();
+			/*List<Role> roles =new ArrayList<>();
 			roles.add(new Role("ADMIN"));
 			System.out.println("role main : "+roles);
 			userService.saveUser(new User("Admin", "root@gmail.com", "root123", roles));
@@ -77,7 +68,7 @@ public class SaleSport {
 
 			acteur.setNom("moetez");
 			acteur.setEmail("moetezmaddouri@gmail.com");
-			acteurServ.saveActeru(acteur);
+			acteurServ.saveActeru(acteur);*/
 
 
 

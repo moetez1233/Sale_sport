@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class DepotServImpl implements DepotService {
@@ -19,5 +20,10 @@ public class DepotServImpl implements DepotService {
     public Optional<Depot> saveDepot(Depot depot) {
         depot.setActeur(acteurServ.getUserConnected());
         return Optional.of(depotRepo.save(depot));
+    }
+
+    @Override
+    public Set<Depot> getallDepot() {
+        return depotRepo.getAllDepotByActeurId(acteurServ.getUserConnected().getId());
     }
 }

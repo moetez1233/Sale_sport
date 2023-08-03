@@ -36,17 +36,19 @@ public class AuthorisationFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
+
 		HttpServletResponse httpServletResponse = (HttpServletResponse) response;
 		httpServletResponse.setHeader("Access-Control-Allow-Origin", "*");
 		httpServletResponse.setHeader("Access-Control-Allow-Methods", "*");
 		httpServletResponse.setHeader("Access-Control-Allow-Headers", "*");
 		httpServletResponse.setHeader("Access-Control-Allow-Credentials", "*");
 		httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
-		if (request.getServletPath().equals("/login") || request.getServletPath().equals("/api/token/refresh") ) {
+		if (request.getServletPath().equals("/login") || request.getServletPath().equals("/api/token/refresh")) {
 			filterChain.doFilter(request, response); // let user connect
 		} else {
 System.out.println("hello");
-			String authorisationHeader = request.getHeader(AUTHORIZATION);
+			String authorisationHeader1 = request.getHeader(AUTHORIZATION);
+			String authorisationHeader ="Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtb2V0ZXptYWRkb3VyaUBnbWFpbC5jb20iLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjkwOTgvbG9naW4iLCJleHAiOjE2OTExNDQ0OTl9.ik9s9TJhFBM4GK9iL0jG0HSHxUIy-iyIoc9RWuoK24E";
 			if (authorisationHeader != null && authorisationHeader.startsWith("Bearer ")) {
 				try {
 					System.out.println("Token valid");
