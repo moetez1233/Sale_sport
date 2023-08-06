@@ -24,6 +24,7 @@ public class DepotServImpl implements DepotService {
 
     @Override
     public Set<Depot> getallDepot() {
+        
         return depotRepo.getAllDepotByActeurId(acteurServ.getUserConnected().getId());
     }
 }

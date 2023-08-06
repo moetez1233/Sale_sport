@@ -20,7 +20,7 @@ public class Depot {
     private String libelle;
     private String ville;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "acteur_id")
     private Acteur acteur;
 

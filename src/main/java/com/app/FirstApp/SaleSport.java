@@ -50,37 +50,37 @@ public class SaleSport {
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
 	}
-@Bean
+
+	@Bean
+	public WebMvcConfigurer corsConfigurer() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addCorsMappings(CorsRegistry registry) {
+				registry.addMapping("/**").allowedMethods("GET", "POST", "PUT", "DELETE").allowedOrigins("*")
+						.allowedHeaders("*");
+			}
+		};
+	}
+	@Bean
 	CommandLineRunner run(UserService userService, DepotService depotService, ProduitService produitService, TierService tierService, FactureService factureService, ActeurServ acteurServ) {
 		return args -> {
 			//userService.saveRole(new Role("Add"));
 			//userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "12356sdf", new ArrayList<>()));
-		
-			/*List<Role> roles =new ArrayList<>();
+
+			/*List<Role> roles = new ArrayList<>();
 			roles.add(new Role("ADMIN"));
-			System.out.println("role main : "+roles);
+			System.out.println("role main : " + roles);
 			userService.saveUser(new User("Admin", "root@gmail.com", "root123", roles));
 			//System.out.println(userService.getUsers());
-			List<Role> rolesUser2 =new ArrayList<>();
+			List<Role> rolesUser2 = new ArrayList<>();
 			rolesUser2.add(new Role("ADMIN"));
 			userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "root123", rolesUser2));
-			Acteur acteur =new Acteur();
+			Acteur acteur = new Acteur();
 
 			acteur.setNom("moetez");
 			acteur.setEmail("moetezmaddouri@gmail.com");
 			acteurServ.saveActeru(acteur);*/
 
-
-
-
-
-
-
-
-
-
-			
 		};
 	}
-
 }
