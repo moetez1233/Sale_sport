@@ -15,10 +15,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 //@Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(
+/*@EnableGlobalMethodSecurity(
 		prePostEnabled = true
 	
-)
+)*/
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserService userDetailsService;
 
@@ -54,12 +54,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/login","/api/token/refresh/**").permitAll();
-		//http.authorizeHttpRequests().anyRequest().permitAll();
+
 
 		http.csrf().disable()
-				.authorizeRequests().antMatchers(HttpMethod.GET,"/api/users").hasAnyAuthority("consulter_users").and().cors(); //authorize only role =role_User to pass requet GET :http://localhost:9098/api/users
-		http.csrf().disable()
-				.authorizeRequests().antMatchers(HttpMethod.GET,"/api/depot").hasAnyAuthority("consulter_users").and().cors(); //a
+				.authorizeRequests().antMatchers(HttpMethod.GET,"/api/depot").hasAnyAuthority("ADMIN").and().cors(); //authorize only role =role_User to pass requet GET :http://localhost:9098/api/users
+
 
 		http.authorizeRequests().anyRequest().authenticated();
 		/* =============== our filtre =================== */

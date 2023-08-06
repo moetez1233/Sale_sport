@@ -13,7 +13,7 @@ import java.util.Collection;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-@Component
+//@Component
 public class UserRolesService {
 
 	public Boolean getRoleUser(HttpServletRequest request, String RoleSerched) {

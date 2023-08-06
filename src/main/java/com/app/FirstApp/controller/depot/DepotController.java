@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
-@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/depot")
 public class DepotController {
@@ -17,8 +16,7 @@ public class DepotController {
     private DepotService depotService;
 
     @GetMapping
-    private ResponseEntity<Set<Depot>> getAll(    @RequestHeader(value="Accept") String acceptHeader,
-                                                  @RequestHeader(value="Authorization") String authorizationHeader){
+    private ResponseEntity<Set<Depot>> getAll(){
         return new ResponseEntity<>(depotService.getallDepot(), HttpStatus.OK);
     }
 }
