@@ -7,7 +7,8 @@ import com.app.FirstApp.domain.facture.StatusFacture;
 import com.app.FirstApp.domain.facture.StatusPaiementFacture;
 import com.app.FirstApp.domain.produits.Produits;
 import com.app.FirstApp.domain.tier.Tier;
-import com.app.FirstApp.modele.FactureDto;
+import com.app.FirstApp.modele.FactureDtoTest;
+import com.app.FirstApp.modele.facture.FactureDto;
 import com.app.FirstApp.services.Acteur.ActeurServ;
 import com.app.FirstApp.services.depot.DepotService;
 import com.app.FirstApp.services.facture.DetailFactureServ;
@@ -16,10 +17,7 @@ import com.app.FirstApp.services.produit.ProduitService;
 import com.app.FirstApp.services.tier.TierService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,8 +44,16 @@ public class FactureController {
         this.detailFactureServ = detailFactureServ;
         this.acteurServ=acteurServ;
     }
-
+    @PostMapping
+    private ResponseEntity<FactureDto> saveFacture(@RequestBody FactureDto factureModele){
+        return new ResponseEntity<>(factureService.saveFactureDto(factureModele),HttpStatus.CREATED);
+    }
     @GetMapping
+    private ResponseEntity<List<FactureDto>> listFacture(){
+        return new ResponseEntity<>(factureService.getListFactureDto(),HttpStatus.OK);
+    }
+
+    @GetMapping("/addTestFacture")
     public ResponseEntity<String> getFacureSaved(){
         Depot depot = new Depot();
         depot.setCode("depot1");
@@ -62,7 +68,7 @@ public class FactureController {
         produits.setQuantiteInitiale(new BigDecimal(45));
         produits.setQuantite(new BigDecimal(45));
         produits.setDepot(depotSaved);
-        Produits produitSaved = produitService.saveFacture(produits).get();
+        Produits produitSaved = produitService.saveProduit(produits).get();
 
         Tier tier = new Tier();
         tier.setNom("moetez");
@@ -89,10 +95,10 @@ public class FactureController {
         detailFacture.setPrix(new BigDecimal(100));
         detailFactureSet.add(detailFacture);
 
-        Set<Produits> produitSet =produitService.getAllByActeur(acteurServ.getUserConnected().getId()).get();
+        Set<Produits> produitSet =produitService.getAllByActeur().get();
 
         List<Produits> produitToUpdate = new ArrayList<>();
-        Facture factureSaved = factureService.saveEtaFacture(facture).get();
+        Facture factureSaved = factureService.saveFacture(facture).get();
         detailFactureSet.stream().forEach(d -> {
             produitToUpdate.add(produitSet.stream().filter(p -> p.equals(d.getProduits())).findFirst().get());
             d.setFacture(factureSaved);
@@ -109,10 +115,10 @@ public class FactureController {
     }
 
     @GetMapping("/testFacture")
-    public ResponseEntity<FactureDto> testFacture(){
-        FactureDto factureDto = new FactureDto();
+    public ResponseEntity<FactureDtoTest> testFacture(){
+        FactureDtoTest factureDto = new FactureDtoTest();
         factureDto.setFacture(factureService.getAllFactures().get(0));
-        factureDto.setFactureSet(detailFactureServ.getSetDetailFactures(factureDto.getFacture().getId()));
+        factureDto.setDetailFactures(detailFactureServ.getSetDetailFactures(factureDto.getFacture().getId()));
 
         return new ResponseEntity<>(factureDto,HttpStatus.OK);
     }

@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.Set;
 
 public interface ProduitService {
-    Optional<Produits> saveFacture(Produits produits);
+    Optional<Produits> saveProduit(Produits produits);
     Optional<List<Produits>> saveAllProduit(List<Produits> produits);
-    Optional<Set<Produits>> getAllByActeur(Long acteurId);
+    Optional<Set<Produits>> getAllByActeur();
 }

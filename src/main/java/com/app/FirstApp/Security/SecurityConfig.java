@@ -57,7 +57,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
 		http.csrf().disable()
-				.authorizeRequests().antMatchers(HttpMethod.GET,"/api/depot").hasAnyAuthority("ADMIN").and().cors(); //authorize only role =role_User to pass requet GET :http://localhost:9098/api/users
+				.authorizeRequests().antMatchers(HttpMethod.GET,"/api/**").hasAnyAuthority("ADMIN").and().cors();
+		//authorize only role =role_User to pass requet GET :http://localhost:9098/api/users
+		http.csrf().disable()
+				.authorizeRequests().antMatchers(HttpMethod.POST,"/api/**").hasAnyAuthority("ADMIN").and().cors();
+		http.csrf().disable()
+				.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/**").hasAnyAuthority("ADMIN").and().cors();
+		http.csrf().disable()
+				.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/**").hasAnyAuthority("ADMIN").and().cors();
 
 
 		http.authorizeRequests().anyRequest().authenticated();

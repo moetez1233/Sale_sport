@@ -19,7 +19,7 @@ public class ProduitServImpl implements ProduitService {
     private ActeurServ acteurServ;
 
     @Override
-    public Optional<Produits> saveFacture(Produits produits) {
+    public Optional<Produits> saveProduit(Produits produits) {
         produits.setActeur(acteurServ.getUserConnected());
         return Optional.of(produitRepo.save(produits));
     }
@@ -30,7 +30,8 @@ public class ProduitServImpl implements ProduitService {
     }
 
     @Override
-    public Optional<Set<Produits>> getAllByActeur(Long acteurId) {
-        return produitRepo.getAllByActeurId(acteurId);
+    public Optional<Set<Produits>> getAllByActeur() {
+
+        return produitRepo.getAllByActeurId(acteurServ.getUserConnected().getId());
     }
 }

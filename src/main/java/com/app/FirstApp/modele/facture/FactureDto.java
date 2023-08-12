@@ -1,22 +1,18 @@
-package com.app.FirstApp.domain.facture;
+package com.app.FirstApp.modele.facture;
 
 import com.app.FirstApp.domain.acteur.Acteur;
+import com.app.FirstApp.domain.facture.StatusFacture;
+import com.app.FirstApp.domain.facture.StatusPaiementFacture;
 import com.app.FirstApp.domain.tier.Tier;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.Set;
-@Entity
-@Table
-@Data
-public class Facture {
+import java.util.List;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "facture_id")
+@Data
+public class FactureDto {
     private Long id;
     private String numero;
     @Enumerated(EnumType.STRING)
@@ -24,19 +20,9 @@ public class Facture {
     @Enumerated(EnumType.STRING)
     private StatusPaiementFacture statusPaiementFacture;
 
-    @ManyToOne
-    @JoinColumn(name = "tier_id")
     private Tier client;
-
-
     private LocalDate dateFacture;
     private BigDecimal prixTotale;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "acteur_id")
-    private Acteur acteur;
-
-
-
+    private List<DetailFactureDto> detailFactures;
 
 }

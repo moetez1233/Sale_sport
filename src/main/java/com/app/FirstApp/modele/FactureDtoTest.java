@@ -6,9 +6,7 @@ import lombok.Data;
 
 import java.util.Set;
 @Data
-public class FactureDto {
+public class FactureDtoTest {
     private Facture facture;
-    private Set<DetailFacture> factureSet;
-
-
+    private Set<DetailFacture> detailFactures;
 }

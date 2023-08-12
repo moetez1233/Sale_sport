@@ -74,11 +74,13 @@ public class SaleSport {
 			//System.out.println(userService.getUsers());
 			List<Role> rolesUser2 = new ArrayList<>();
 			rolesUser2.add(new Role("ADMIN"));
-			userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "root123", rolesUser2));
+			User userSaved = userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "root123", rolesUser2));
 			Acteur acteur = new Acteur();
 
-			acteur.setNom("moetez");
-			acteur.setEmail("moetezmaddouri@gmail.com");
+			acteur.setNom(userSaved.getName());
+			acteur.setEmail(userSaved.getEmail());
+			acteur.setPrenom("maddouri");
+			acteur.setAdress("Tunis");
 			acteurServ.saveActeru(acteur);*/
 
 		};

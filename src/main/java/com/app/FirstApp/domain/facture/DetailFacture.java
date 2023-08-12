@@ -21,7 +21,7 @@ public class DetailFacture {
     @JoinColumn(name = "produit_id")
     private Produits produits;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="facture_id")
     private Facture facture;
 }
