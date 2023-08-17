@@ -2,6 +2,8 @@ package com.app.FirstApp.domain.facture;
 
 import com.app.FirstApp.domain.produits.Produits;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -23,5 +25,6 @@ public class DetailFacture {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="facture_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Facture facture;
 }

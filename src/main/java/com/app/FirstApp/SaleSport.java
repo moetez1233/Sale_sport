@@ -79,8 +79,7 @@ public class SaleSport {
 
 			acteur.setNom(userSaved.getName());
 			acteur.setEmail(userSaved.getEmail());
-			acteur.setPrenom("maddouri");
-			acteur.setAdress("Tunis");
+
 			acteurServ.saveActeru(acteur);*/
 
 		};

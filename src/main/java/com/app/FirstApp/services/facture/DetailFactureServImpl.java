@@ -19,6 +19,6 @@ public class DetailFactureServImpl implements DetailFactureServ {
 
     @Override
     public Set<DetailFacture> getSetDetailFactures(Long factureId) {
-        return detailFactureRepo.getAllByFactureID(factureId);
+        return detailFactureRepo.getAllByFactureID(factureId).get();
     }
 }

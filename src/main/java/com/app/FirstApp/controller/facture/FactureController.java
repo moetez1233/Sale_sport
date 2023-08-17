@@ -23,6 +23,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 @CrossOrigin(origins = "*")
 @RestController
@@ -47,6 +48,11 @@ public class FactureController {
     @PostMapping
     private ResponseEntity<FactureDto> saveFacture(@RequestBody FactureDto factureModele){
         return new ResponseEntity<>(factureService.saveFactureDto(factureModele),HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{factureId}")
+    private void deleteFacture(@PathVariable Long factureId){
+      factureService.deletFacture(factureId);
     }
     @GetMapping
     private ResponseEntity<List<FactureDto>> listFacture(){

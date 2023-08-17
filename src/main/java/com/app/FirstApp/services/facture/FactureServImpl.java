@@ -13,6 +13,7 @@ import com.app.FirstApp.repository.facture.FactureRepo;
 import com.app.FirstApp.repository.produit.ProduitRepo;
 import com.app.FirstApp.services.Acteur.ActeurServ;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,25 +52,22 @@ public class FactureServImpl implements FactureService {
     @Override
     public FactureDto saveFactureDto(FactureDto factureDto) {
         Acteur acteur = acteurServ.getUserConnected();
-        Facture facture = new Facture();
+
         String mes = "";
         List<DetailFacture> detailFacturesList = new ArrayList<>();
         List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
         List<DetailFactureDto> detailFacturesDto = factureDto.getDetailFactures();
-        facture.setNumero(getNumeroFacture(acteur.getId()));
-        facture.setStatusFacture(factureDto.getStatusFacture());
-        facture.setStatusPaiementFacture(factureDto.getStatusPaiementFacture());
-        facture.setPrixTotale(factureDto.getPrixTotale());
-        facture.setClient(factureDto.getClient());
-        facture.setDateFacture(LocalDate.now());
-        facture.setActeur(acteur);
+        factureDto.setNumero(getNumeroFacture(acteur.getId()));
+        Facture facture = factureMapperService.dtoFactureToEntity(factureDto);
+        facture.setActeur(acteurServ.getUserConnected());
+
         Facture factureSaved = factureRepo.save(facture);
 
         detailFacturesDto.forEach(fctDto -> {
             DetailFacture detailFacture = new DetailFacture();
             BigDecimal quantiteFacture = (fctDto.getProduits().getQuantite().subtract(fctDto.getQuantite()));
             if (quantiteFacture.compareTo(BigDecimal.ZERO)==0 || quantiteFacture.compareTo(BigDecimal.ZERO)==1) {
-                fctDto.getProduits().setQuantite(fctDto.getQuantite());
+                fctDto.getProduits().setQuantite(quantiteFacture);
                 produitsListUpdatedQuantite.add(fctDto.getProduits());
                 detailFacture.setProduits(fctDto.getProduits());
                 detailFacture.setQuantite(fctDto.getQuantite());
@@ -100,7 +98,7 @@ public class FactureServImpl implements FactureService {
         Acteur acteur=acteurServ.getUserConnected();
         List<Facture>  factureList=factureRepo.getListFactureByActeur(acteur.getId());
         List<Long> idsFacture=factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
-        List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture);
+        List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).get();
 
         List<FactureDto> factureDtoList=factureMapperService.listEntityFactureToDto(factureList);
         factureDtoList.forEach(facDto -> {
@@ -122,5 +120,21 @@ public class FactureServImpl implements FactureService {
         calendar.setTime(new Date());
         String year = String.valueOf(calendar.get(Calendar.YEAR));
         return year + "/" + numroFacture;
+    }
+
+    @Override
+    public void deletFacture(Long factureId) {
+        Map<String,Boolean> resDelt=new HashMap<>();
+        if(factureRepo.getFacturewithId(factureId).get() != null){
+            /*if(detailFactureRepo.getAllByFactureID(factureId).get().size()>0){
+                detailFactureRepo.deleteDetailFacture(factureId);
+
+            }*/
+            factureRepo.deleteFacture(factureId);
+            resDelt.put("isDeleted",true);
+        }else{
+            resDelt.put("isDeleted",true);
+        }
+
     }
 }

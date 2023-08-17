@@ -6,13 +6,22 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FactureRepo extends JpaRepository<Facture,Long> {
 
     @Query(value = "select * from facture where acteur_id =:acteurId",nativeQuery = true)
     List<Facture> getListFactureByActeur(@Param("acteurId") Long acteruId);
 
+    @Query(value = "select * from facture where facture_id =:factureId",nativeQuery = true)
+    Optional<Facture> getFacturewithId(@Param("factureId") Long factureId);
+
     @Query(value = "select count (*) from facture where acteur_id=:acteurId",nativeQuery = true)
     Integer getnumbreFacture(@Param("acteurId") Long acteurId);
+
+
+
+    @Query(value = "delete from facture where facture_id =:factureId",nativeQuery = true)
+    void deleteFacture(@Param("factureId") Long factureId);
 
 }

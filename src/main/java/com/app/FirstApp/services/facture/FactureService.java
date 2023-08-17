@@ -5,6 +5,7 @@ import com.app.FirstApp.domain.facture.Facture;
 import com.app.FirstApp.modele.facture.FactureDto;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface FactureService {
@@ -13,4 +14,5 @@ public interface FactureService {
     Optional<Facture> saveFacture(Facture facture);
     List<Facture> getAllFactures();
     String getNumeroFacture(Long acteurId);
+    void deletFacture(Long factureId);
 }
