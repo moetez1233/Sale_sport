@@ -76,11 +76,9 @@ public class SaleSport {
 			rolesUser2.add(new Role("ADMIN"));
 			User userSaved = userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "root123", rolesUser2));
 			Acteur acteur = new Acteur();
-
 			acteur.setNom(userSaved.getName());
 			acteur.setEmail(userSaved.getEmail());
-
-			acteurServ.saveActeru(acteur);*/
+			acteurServ.saveActeru(acteur); */
 
 		};
 	}

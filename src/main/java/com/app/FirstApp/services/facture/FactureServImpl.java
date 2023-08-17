@@ -124,17 +124,10 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public void deletFacture(Long factureId) {
-        Map<String,Boolean> resDelt=new HashMap<>();
-        if(factureRepo.getFacturewithId(factureId).get() != null){
-            /*if(detailFactureRepo.getAllByFactureID(factureId).get().size()>0){
-                detailFactureRepo.deleteDetailFacture(factureId);
-
-            }*/
-            factureRepo.deleteFacture(factureId);
-            resDelt.put("isDeleted",true);
-        }else{
-            resDelt.put("isDeleted",true);
-        }
+      Facture facture = factureRepo.findById(factureId).get();
+      Set<DetailFacture> detailFactureList= detailFactureRepo.getAllByFactureID(factureId).get();
+      detailFactureRepo.deleteAllById(detailFactureList.stream().map(d ->d.getId()).collect(Collectors.toList()));
+      factureRepo.delete(facture);
 
     }
 }

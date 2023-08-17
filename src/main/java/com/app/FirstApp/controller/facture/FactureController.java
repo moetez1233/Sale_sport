@@ -51,8 +51,9 @@ public class FactureController {
     }
 
     @DeleteMapping("/{factureId}")
-    private void deleteFacture(@PathVariable Long factureId){
+    private ResponseEntity<String> deleteFacture(@PathVariable Long factureId){
       factureService.deletFacture(factureId);
+      return new ResponseEntity<>("delete_success",HttpStatus.OK);
     }
     @GetMapping
     private ResponseEntity<List<FactureDto>> listFacture(){
