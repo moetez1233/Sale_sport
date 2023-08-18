@@ -53,13 +53,13 @@ public class FactureServImpl implements FactureService {
     public FactureDto saveFactureDto(FactureDto factureDto) {
         Acteur acteur = acteurServ.getUserConnected();
 
-        String mes = "";
         List<DetailFacture> detailFacturesList = new ArrayList<>();
         List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
         List<DetailFactureDto> detailFacturesDto = factureDto.getDetailFactures();
         factureDto.setNumero(getNumeroFacture(acteur.getId()));
         Facture facture = factureMapperService.dtoFactureToEntity(factureDto);
         facture.setActeur(acteurServ.getUserConnected());
+        facture.setDateFacture(LocalDate.now());
 
         Facture factureSaved = factureRepo.save(facture);
 
