@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.20.0.final using JasperReports Library version 6.20.0-2bc7ab61c56f459e8176eb05c7705e145cd400ad  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0cd046f0-8bfa-4cbb-8243-25e4b5cfbc0f">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <parameter name="firstName" class="java.lang.String"/>
+    <parameter name="lastNameClient" class="java.lang.String"/>
+    <parameter name="phone" class="java.math.BigDecimal"/>
+    <parameter name="statusFacture" class="java.lang.String"/>
+    <parameter name="statusPaiementFacture" class="java.lang.String"/>
+    <parameter name="prixTotal" class="java.math.BigDecimal"/>
+    <parameter name="numeroFacture" class="java.lang.String"/>
+    <parameter name="dateFacture" class="java.sql.Date"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="62" splitType="Stretch">
+            <frame>
+                <reportElement mode="Opaque" x="0" y="0" width="560" height="60" backcolor="#BCBFC2" uuid="48e17295-9a3b-4601-b31f-d4468f5fc321"/>
+                <staticText>
+                    <reportElement x="202" y="0" width="150" height="30" uuid="dc3fe4a6-8577-40ce-8fba-a3a83c28033e"/>
+                    <textElement>
+                        <font size="22"/>
+                    </textElement>
+                    <text><![CDATA[Facture Vente]]></text>
+                </staticText>
+                <textField>
+                    <reportElement x="210" y="30" width="100" height="30" uuid="896d11fe-8ff4-4704-aaf4-8bda773e1ee3"/>
+                    <textElement textAlignment="Center"/>
+                    <textFieldExpression><![CDATA[$P{numeroFacture}]]></textFieldExpression>
+                </textField>
+                <textField>
+                    <reportElement x="460" y="5" width="100" height="20" uuid="cb434369-bd07-4ed5-aedb-16b7b68113a4"/>
+                    <textFieldExpression><![CDATA[$P{dateFacture}]]></textFieldExpression>
+                </textField>
+            </frame>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="10" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="14" splitType="Stretch"/>
+    </columnHeader>
+    <detail>
+        <band height="138" splitType="Stretch">
+            <staticText>
+                <reportElement mode="Opaque" x="40" y="10" width="139" height="28" backcolor="#E0D8D7" uuid="b5c5f5c2-df35-49e9-903f-c117a8f311ed"/>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <text><![CDATA[Client : ]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="89" y="40" width="90" height="18" uuid="73df53a9-9b50-48af-b997-2c0ee9024b01"/>
+                <textElement>
+                    <font size="13"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{firstName}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="89" y="70" width="100" height="19" uuid="9df27539-6466-4a25-860c-6f5c1a8d36f2"/>
+                <textElement>
+                    <font size="13"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{lastNameClient}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="40" y="40" width="49" height="30" uuid="9521175f-fdfc-4e5c-b518-0705931f4a96"/>
+                <text><![CDATA[Nom :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="40" y="70" width="49" height="30" uuid="b3c45511-7e18-46ef-b521-89986442e276"/>
+                <text><![CDATA[Prénom :]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="40" y="100" width="59" height="30" uuid="8c8a0671-ed69-462d-9f70-21bdf4ed3305"/>
+                <text><![CDATA[Téléphone :]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="100" y="100" width="100" height="30" uuid="ef0fee64-1dd8-45b1-a3f9-4830559aecc9"/>
+                <textFieldExpression><![CDATA[$P{phone}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="391" y="40" width="90" height="18" uuid="8ee55598-1943-4468-9cfa-91330355f02c"/>
+                <textElement>
+                    <font size="11"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{statusFacture}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="430" y="70" width="100" height="19" uuid="14893dbe-42b0-460b-8e6f-9d32ea8e9ed8"/>
+                <textElement>
+                    <font size="11"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{statusPaiementFacture}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="352" y="40" width="39" height="30" uuid="1649e1dc-f480-41ac-b3c2-4abe5ea06414"/>
+                <text><![CDATA[Status:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="352" y="70" width="78" height="30" uuid="41cf4e18-aea7-49d7-9675-7c2d4ba93978"/>
+                <text><![CDATA[Status paiement:]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="352" y="100" width="59" height="30" uuid="34a67317-3ac9-49c3-bf62-cb7163af4a15"/>
+                <text><![CDATA[Prix totale :]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="411" y="100" width="100" height="30" uuid="a9337748-d984-4926-8e0f-4bdf921cb5f5"/>
+                <textFieldExpression><![CDATA[$P{prixTotal}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement mode="Opaque" x="350" y="10" width="139" height="28" backcolor="#E0D8D7" uuid="0a25526d-7a3b-4549-a0c5-d34249baa3d1"/>
+                <textElement>
+                    <font size="16"/>
+                </textElement>
+                <text><![CDATA[Facture details]]></text>
+            </staticText>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="108" splitType="Stretch"/>
+    </summary>
+</jasperReport>

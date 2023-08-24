@@ -14,6 +14,7 @@ public class DetailFactureServImpl implements DetailFactureServ {
 
     @Override
     public List<DetailFacture> saveDetailleFacture(List<DetailFacture> detailFactures) {
+        //detailFactures.stream().forEach(d -> d.setLibelleProduit(d.getProduits().getLibell()));
         return detailFactureRepo.saveAll(detailFactures);
     }
 

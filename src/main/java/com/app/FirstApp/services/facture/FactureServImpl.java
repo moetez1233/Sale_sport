@@ -13,10 +13,15 @@ import com.app.FirstApp.repository.facture.FactureRepo;
 import com.app.FirstApp.repository.produit.ProduitRepo;
 import com.app.FirstApp.services.Acteur.ActeurServ;
 import lombok.extern.slf4j.Slf4j;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
@@ -129,5 +134,50 @@ public class FactureServImpl implements FactureService {
       detailFactureRepo.deleteAllById(detailFactureList.stream().map(d ->d.getId()).collect(Collectors.toList()));
       factureRepo.delete(facture);
 
+    }
+
+    @Override
+    public ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException {
+        Facture facture = factureRepo.findById(factureId).get();
+        List<DetailFacture> detailFactureList=new ArrayList<>(detailFactureRepo.getAllByFactureID(factureId).get());
+
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        byte[] bytes;
+        File file= ResourceUtils.getFile("classpath:jasperFiles/factureVenteTemp.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource=new JRBeanCollectionDataSource(detailFactureList);
+        // add parametres to pdf file
+        Map<String,Object> paramateres =new HashMap<>();
+        paramateres.put("firstName", facture.getClient().getNom());
+        paramateres.put("phone", facture.getClient().getNumeroTel());
+        paramateres.put("lastNameClient", facture.getClient().getPrenom());
+        paramateres.put("statusFacture", facture.getStatusFacture().toString());
+        paramateres.put("statusPaiementFacture", facture.getStatusPaiementFacture().toString());
+        paramateres.put("numeroFacture", facture.getNumero());
+        paramateres.put("dateFacture", java.sql.Date.valueOf(facture.getDateFacture()));
+        paramateres.put("prixTotal", facture.getPrixTotale());
+        // end add parametres to pdf file
+        JasperPrint jasperPrint= JasperFillManager.fillReport(jasperReport,paramateres,dataSource); // save all data and paraletres to our pdf
+        // JasperExportManager.exportReportToPdfFile(jasperPrint ,"src/main/resources/FactureEmployees.pdf"); // upload file localy in specific path
+        JasperExportManager.exportReportToPdfStream(jasperPrint,outputStream); // tronsform our pdf file to outputStrem
+        bytes=outputStream.toByteArray(); // tronsform our pdf outputStream to byte[]
+        return new ByteArrayInputStream(bytes); // return pdf fil in array input stream
+
+    }
+
+    // tronsform arrayInput stream to page web
+    @Override
+    public void writePdfStreamToHttpServletResponse(HttpServletResponse response, ByteArrayInputStream byteArrayInputStream) throws Exception {
+        OutputStream os = response.getOutputStream();
+//        response.setHeader("content-disposition", "inline; filename=file.pdf");
+        response.setContentType("application/pdf; name=\"MyFile.pdf\"");
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setHeader("Cache-Control", "private, must-revalidate, post-check=0, pre-check=0, max-age=1");
+        response.setHeader("Pragma", "public");
+        response.setHeader("Content-Disposition", "attachment; filename=\"file_from_server.pdf\"");
+        byte[] pdfAsStream = new byte[byteArrayInputStream.available()];
+        byteArrayInputStream.read(pdfAsStream);
+        os.write(pdfAsStream);
+        os.close();
     }
 }

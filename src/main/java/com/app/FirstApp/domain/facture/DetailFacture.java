@@ -18,6 +18,7 @@ public class DetailFacture {
     private Long id;
     private BigDecimal quantite;
     private BigDecimal prix;
+    private String libelleProduit;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")
@@ -27,4 +28,6 @@ public class DetailFacture {
     @JoinColumn(name="facture_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Facture facture;
+
+
 }

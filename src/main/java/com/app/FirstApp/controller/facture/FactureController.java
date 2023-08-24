@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -54,6 +56,11 @@ public class FactureController {
     private ResponseEntity<String> deleteFacture(@PathVariable Long factureId){
       factureService.deletFacture(factureId);
       return new ResponseEntity<>("delete_success",HttpStatus.OK);
+    }
+    @GetMapping("/generateFacture/{factureId}")
+    public void generateFactureToPdfFile(HttpServletResponse response,@PathVariable Long factureId) throws Exception {
+        ByteArrayInputStream byteArrayInputStream=factureService.exportFactureEmploy(factureId);
+        factureService.writePdfStreamToHttpServletResponse(response, byteArrayInputStream); // pdf file inn web page
     }
     @GetMapping
     private ResponseEntity<List<FactureDto>> listFacture(){
@@ -107,6 +114,7 @@ public class FactureController {
         List<Produits> produitToUpdate = new ArrayList<>();
         Facture factureSaved = factureService.saveFacture(facture).get();
         detailFactureSet.stream().forEach(d -> {
+            d.setLibelleProduit(d.getProduits().getLibell());
             produitToUpdate.add(produitSet.stream().filter(p -> p.equals(d.getProduits())).findFirst().get());
             d.setFacture(factureSaved);
                 }

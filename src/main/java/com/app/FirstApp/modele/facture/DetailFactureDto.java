@@ -12,6 +12,7 @@ public class DetailFactureDto {
     private Long id;
     private BigDecimal quantite;
     private BigDecimal prix;
+    private String libelleProduit;
     private Produits produits;
 
 }
