@@ -1,5 +1,6 @@
 package com.app.FirstApp.services.facture;
 
+import com.app.FirstApp.config.customException.NotExisteException;
 import com.app.FirstApp.domain.acteur.Acteur;
 import com.app.FirstApp.domain.facture.DetailFacture;
 import com.app.FirstApp.domain.facture.Facture;
@@ -15,9 +16,12 @@ import com.app.FirstApp.services.Acteur.ActeurServ;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -44,20 +48,37 @@ public class FactureServImpl implements FactureService {
     @Autowired
     DetailFactureMapperService detailFactureMapperService;
 
-    @Override
-    public Optional<Facture> saveFacture(Facture facture) {
-        Acteur acteur = acteurServ.getUserConnected();
-        facture.setNumero(getNumeroFacture(acteur.getId()));
-        facture.setActeur(acteur);
-        Facture facture1 = factureRepo.save(facture);
 
-        return Optional.of(facture1);
+
+    @Override
+    @Transactional
+    public FactureDto updateFactureDto(FactureDto factureDto) {
+        Facture facture = factureMapperService.dtoFactureToEntity(factureDto);
+        List<DetailFacture> detailFacturesList=detailFactureMapperService.ListDtoToEntity(factureDto.getDetailFactures());
+        facture.setActeur(acteurServ.getUserConnected());
+        Facture factureSaved = factureRepo.save(facture);
+        List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
+        detailFacturesList.forEach(detailFact -> {
+            BigDecimal quantiteFacture = (detailFact.getProduits().getQuantite().subtract(detailFact.getQuantite()));
+            if (quantiteFacture.compareTo(BigDecimal.ZERO)==0 || quantiteFacture.compareTo(BigDecimal.ZERO)==1) {
+                detailFact.getProduits().setQuantite(quantiteFacture);
+                produitsListUpdatedQuantite.add(detailFact.getProduits());
+                detailFact.setFacture(factureSaved);
+                detailFact.setLibelleProduit(detailFact.getProduits().getLibell());
+            }else{
+
+                new RuntimeException("Quantite produit insufffisante");
+            }
+        });
+        detailFactureRepo.saveAll(detailFacturesList);
+        produitRepo.saveAll(produitsListUpdatedQuantite);
+        return factureMapperService.entityFactureToDto(factureSaved);
     }
 
     @Override
+    @Transactional
     public FactureDto saveFactureDto(FactureDto factureDto) {
         Acteur acteur = acteurServ.getUserConnected();
-
         List<DetailFacture> detailFacturesList = new ArrayList<>();
         List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
         List<DetailFactureDto> detailFacturesDto = factureDto.getDetailFactures();
@@ -78,32 +99,24 @@ public class FactureServImpl implements FactureService {
                 detailFacture.setQuantite(fctDto.getQuantite());
                 detailFacture.setPrix(fctDto.getPrix());
                 detailFacture.setFacture(factureSaved);
+                detailFacture.setLibelleProduit(fctDto.getProduits().getLibell());
                 detailFacturesList.add(detailFacture);
             }else{
 
-                System.out.println("quantite insufffisante ");
+                new RuntimeException("Quantite produit insufffisante");
             }
-
-
         });
         detailFactureRepo.saveAll(detailFacturesList);
         produitRepo.saveAll(produitsListUpdatedQuantite);
-
-
-
-
-
-
-
         return factureDto;
     }
 
     @Override
     public List<FactureDto> getListFactureDto() {
         Acteur acteur=acteurServ.getUserConnected();
-        List<Facture>  factureList=factureRepo.getListFactureByActeur(acteur.getId());
+        List<Facture>  factureList=factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(()-> new NotExisteException("Utilisateur n'existe pas"));
         List<Long> idsFacture=factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
-        List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).get();
+        List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
         List<FactureDto> factureDtoList=factureMapperService.listEntityFactureToDto(factureList);
         factureDtoList.forEach(facDto -> {
@@ -115,7 +128,7 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public List<Facture> getAllFactures() {
-        return factureRepo.getListFactureByActeur(acteurServ.getUserConnected().getId());
+        return factureRepo.getListFactureByActeur(acteurServ.getUserConnected().getId()).orElseThrow(() -> new NotExisteException("Facture n'existe pas "));
     }
 
     @Override
@@ -129,8 +142,8 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public void deletFacture(Long factureId) {
-      Facture facture = factureRepo.findById(factureId).get();
-      Set<DetailFacture> detailFactureList= detailFactureRepo.getAllByFactureID(factureId).get();
+      Facture facture = factureRepo.findById(factureId).orElseThrow(()-> new NotExisteException("Facture non existe"));
+      Set<DetailFacture> detailFactureList= detailFactureRepo.getAllByFactureID(factureId).orElseThrow(() -> new NotExisteException("Details factures non existe"));
       detailFactureRepo.deleteAllById(detailFactureList.stream().map(d ->d.getId()).collect(Collectors.toList()));
       factureRepo.delete(facture);
 
@@ -138,13 +151,14 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException {
-        Facture facture = factureRepo.findById(factureId).get();
+        Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("Facture n'existe pas"));
         List<DetailFacture> detailFactureList=new ArrayList<>(detailFactureRepo.getAllByFactureID(factureId).get());
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] bytes;
         File file= ResourceUtils.getFile("classpath:jasperFiles/factureVenteTemp.jrxml");
-        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        InputStream input = new FileInputStream(file);
+       // JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
         JRBeanCollectionDataSource dataSource=new JRBeanCollectionDataSource(detailFactureList);
         // add parametres to pdf file
         Map<String,Object> paramateres =new HashMap<>();
@@ -156,8 +170,15 @@ public class FactureServImpl implements FactureService {
         paramateres.put("numeroFacture", facture.getNumero());
         paramateres.put("dateFacture", java.sql.Date.valueOf(facture.getDateFacture()));
         paramateres.put("prixTotal", facture.getPrixTotale());
-        // end add parametres to pdf file
-        JasperPrint jasperPrint= JasperFillManager.fillReport(jasperReport,paramateres,dataSource); // save all data and paraletres to our pdf
+        paramateres.put("collectionBeanParam", dataSource);
+
+        JasperDesign jasperDesign = JRXmlLoader.load(input);
+
+        /*compiling jrxml with help of JasperReport class*/
+        JasperReport jasperReport = JasperCompileManager.compileReport(jasperDesign);
+
+        /* Using jasperReport object to generate PDF */
+        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramateres, new JREmptyDataSource());
         // JasperExportManager.exportReportToPdfFile(jasperPrint ,"src/main/resources/FactureEmployees.pdf"); // upload file localy in specific path
         JasperExportManager.exportReportToPdfStream(jasperPrint,outputStream); // tronsform our pdf file to outputStrem
         bytes=outputStream.toByteArray(); // tronsform our pdf outputStream to byte[]

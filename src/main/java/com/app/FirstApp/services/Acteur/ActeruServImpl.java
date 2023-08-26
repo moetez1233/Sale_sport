@@ -1,5 +1,6 @@
 package com.app.FirstApp.services.Acteur;
 
+import com.app.FirstApp.config.customException.NotExisteException;
 import com.app.FirstApp.domain.acteur.Acteur;
 import com.app.FirstApp.domain.user.User;
 import com.app.FirstApp.repository.acteur.ActeurRepo;
@@ -29,6 +30,6 @@ public class ActeruServImpl implements ActeurServ {
     public Acteur getUserConnected() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userDetails = (String)authentication.getPrincipal();
-        return acteurRepo.getActeurByEmail(userDetails);
+        return acteurRepo.getActeurByEmail(userDetails).orElseThrow(()-> new NotExisteException("user not exist"));
     }
 }

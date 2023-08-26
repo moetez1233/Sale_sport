@@ -72,7 +72,7 @@ public class CustumAuthenticationFilter extends UsernamePasswordAuthenticationFi
 		
 		
 		String access_Token = JWT.create().withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 50 * 60 * 1000))
+				.withExpiresAt(new Date(System.currentTimeMillis() + (86400*1000)))
 				.withIssuer(request.getRequestURL().toString())
 				.withClaim("roles",
 						user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
@@ -80,7 +80,7 @@ public class CustumAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
 		/* ========================= refresh token ========================== */
 		String refresh_Token = JWT.create().withSubject(user.getUsername())
-				.withExpiresAt(new Date(System.currentTimeMillis() + 86400 * 1000)) // expired every day
+				.withExpiresAt(new Date(System.currentTimeMillis() + (86400*1000))) // expired every day
 				.withIssuer(request.getRequestURL().toString()).sign(algotithm);
 		/* ========================== end refresh token ====================== */
 		

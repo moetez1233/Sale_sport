@@ -51,6 +51,10 @@ public class FactureController {
     private ResponseEntity<FactureDto> saveFacture(@RequestBody FactureDto factureModele){
         return new ResponseEntity<>(factureService.saveFactureDto(factureModele),HttpStatus.CREATED);
     }
+    @PutMapping
+    private ResponseEntity<FactureDto> updateFacture(@RequestBody FactureDto factureModele){
+        return new ResponseEntity<>(factureService.updateFactureDto(factureModele),HttpStatus.CREATED);
+    }
 
     @DeleteMapping("/{factureId}")
     private ResponseEntity<String> deleteFacture(@PathVariable Long factureId){
@@ -67,7 +71,7 @@ public class FactureController {
         return new ResponseEntity<>(factureService.getListFactureDto(),HttpStatus.OK);
     }
 
-    @GetMapping("/addTestFacture")
+    /*@GetMapping("/addTestFacture")
     public ResponseEntity<String> getFacureSaved(){
         Depot depot = new Depot();
         depot.setCode("depot1");
@@ -128,6 +132,7 @@ public class FactureController {
 
         return new ResponseEntity<>("success add ", HttpStatus.CREATED);
     }
+    */
 
     @GetMapping("/testFacture")
     public ResponseEntity<FactureDtoTest> testFacture(){

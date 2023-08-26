@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public interface FactureService {
     FactureDto saveFactureDto(FactureDto factureDto);
+    FactureDto updateFactureDto(FactureDto factureDto);
     List<FactureDto> getListFactureDto();
-    Optional<Facture> saveFacture(Facture facture);
     List<Facture> getAllFactures();
     String getNumeroFacture(Long acteurId);
     void deletFacture(Long factureId);

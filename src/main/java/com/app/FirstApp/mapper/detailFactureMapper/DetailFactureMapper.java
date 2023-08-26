@@ -15,6 +15,7 @@ public class DetailFactureMapper implements DetailFactureMapperService {
         detailFacture.setQuantite(detailFactureDto.getQuantite());
         detailFacture.setPrix(detailFactureDto.getPrix());
         detailFacture.setProduits(detailFactureDto.getProduits());
+        detailFacture.setLibelleProduit(detailFactureDto.getLibelleProduit());
         return detailFacture;
     }
 
@@ -25,6 +26,7 @@ public class DetailFactureMapper implements DetailFactureMapperService {
         detailFactureDto.setQuantite(detailFacture.getQuantite());
         detailFactureDto.setPrix(detailFacture.getPrix());
         detailFactureDto.setProduits(detailFacture.getProduits());
+        detailFactureDto.setLibelleProduit(detailFacture.getLibelleProduit());
         return detailFactureDto;
     }
 

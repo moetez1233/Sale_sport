@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface FactureRepo extends JpaRepository<Facture,Long> {
 
-    @Query(value = "select * from facture where acteur_id =:acteurId",nativeQuery = true)
-    List<Facture> getListFactureByActeur(@Param("acteurId") Long acteruId);
+    @Query(value = "select * from facture where acteur_id =:acteurId order by id desc ",nativeQuery = true)
+    Optional<List<Facture>> getListFactureByActeur(@Param("acteurId") Long acteruId);
 
     @Query(value = "select * from facture where facture_id =:factureId",nativeQuery = true)
     Optional<Facture> getFacturewithId(@Param("factureId") Long factureId);
