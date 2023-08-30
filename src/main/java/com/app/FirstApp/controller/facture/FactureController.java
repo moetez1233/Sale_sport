@@ -74,8 +74,6 @@ public class FactureController {
 
 
 
-        return new ResponseEntity<>("success add ", HttpStatus.CREATED);
-    }
 
 
 }
