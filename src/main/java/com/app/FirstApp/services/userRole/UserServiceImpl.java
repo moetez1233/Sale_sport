@@ -67,8 +67,6 @@ public class UserServiceImpl implements UserService {
 				roleRopo.saveAll(roles);
 				user.setProduction(passwordEncoder.encode("root123"));
 				userRepo.save(user);
-				System.out.println("fix it");
-
 			}
 		}
 	}
