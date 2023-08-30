@@ -36,6 +36,74 @@ public class Facture {
     @JoinColumn(name = "acteur_id")
     private Acteur acteur;
 
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public StatusFacture getStatusFacture() {
+		return statusFacture;
+	}
+
+	public void setStatusFacture(StatusFacture statusFacture) {
+		this.statusFacture = statusFacture;
+	}
+
+	public StatusPaiementFacture getStatusPaiementFacture() {
+		return statusPaiementFacture;
+	}
+
+	public void setStatusPaiementFacture(StatusPaiementFacture statusPaiementFacture) {
+		this.statusPaiementFacture = statusPaiementFacture;
+	}
+
+	public Tier getClient() {
+		return client;
+	}
+
+	public void setClient(Tier client) {
+		this.client = client;
+	}
+
+	public LocalDate getDateFacture() {
+		return dateFacture;
+	}
+
+	public void setDateFacture(LocalDate dateFacture) {
+		this.dateFacture = dateFacture;
+	}
+
+	public BigDecimal getPrixTotale() {
+		return prixTotale;
+	}
+
+	public void setPrixTotale(BigDecimal prixTotale) {
+		this.prixTotale = prixTotale;
+	}
+
+	public Acteur getActeur() {
+		return acteur;
+	}
+
+	public void setActeur(Acteur acteur) {
+		this.acteur = acteur;
+	}
+
+	public Facture() {
+		super();
+	}
+
 
 
 

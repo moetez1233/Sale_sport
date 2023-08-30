@@ -27,4 +27,49 @@ public class DetailFacture {
     @JoinColumn(name="facture_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Facture facture;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public BigDecimal getQuantite() {
+		return quantite;
+	}
+
+	public void setQuantite(BigDecimal quantite) {
+		this.quantite = quantite;
+	}
+
+	public BigDecimal getPrix() {
+		return prix;
+	}
+
+	public void setPrix(BigDecimal prix) {
+		this.prix = prix;
+	}
+
+	public Produits getProduits() {
+		return produits;
+	}
+
+	public void setProduits(Produits produits) {
+		this.produits = produits;
+	}
+
+	public Facture getFacture() {
+		return facture;
+	}
+
+	public void setFacture(Facture facture) {
+		this.facture = facture;
+	}
+
+	public DetailFacture() {
+		super();
+	}
+    
 }

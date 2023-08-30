@@ -65,4 +65,14 @@ public class Depot {
     public void setVille(String ville) {
         this.ville = ville;
     }
+
+	public Acteur getActeur() {
+		return acteur;
+	}
+
+	public void setActeur(Acteur acteur) {
+		this.acteur = acteur;
+	}
+    
+    
 }
