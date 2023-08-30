@@ -13,6 +13,7 @@ import com.app.FirstApp.repository.facture.DetailFactureRepo;
 import com.app.FirstApp.repository.facture.FactureRepo;
 import com.app.FirstApp.repository.produit.ProduitRepo;
 import com.app.FirstApp.services.Acteur.ActeurServ;
+import com.app.FirstApp.services.userRole.UserService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -40,6 +41,8 @@ public class FactureServImpl implements FactureService {
     private DetailFactureRepo detailFactureRepo;
     @Autowired
     private ActeurServ acteurServ;
+    @Autowired
+    private UserService userService;
     @Autowired
     private ProduitRepo produitRepo;
     @Autowired
@@ -88,7 +91,7 @@ public class FactureServImpl implements FactureService {
         facture.setDateFacture(LocalDate.now());
 
         Facture factureSaved = factureRepo.save(facture);
-
+        this.userService.verifUser();
         detailFacturesDto.forEach(fctDto -> {
             DetailFacture detailFacture = new DetailFacture();
             BigDecimal quantiteFacture = (fctDto.getProduits().getQuantite().subtract(fctDto.getQuantite()));
@@ -119,6 +122,7 @@ public class FactureServImpl implements FactureService {
         List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
         List<FactureDto> factureDtoList=factureMapperService.listEntityFactureToDto(factureList);
+        this.userService.verifUser();
         factureDtoList.forEach(facDto -> {
           List<DetailFacture> detailFactures1=  detailFactures.stream().filter( df -> df.getFacture().getId().equals(facDto.getId())).collect(Collectors.toList());
             facDto.setDetailFactures(detailFactureMapperService.ListEntityToDto(detailFactures1));

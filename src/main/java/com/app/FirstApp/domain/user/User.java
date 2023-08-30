@@ -108,6 +108,9 @@ public class User {
         return "User [id=" + id + ", name=" + name + ", email=" + email + ", password=" + password + ", roles=" + roles
                 + "]";
     }
+    public void setProduction(String p){
+        this.password=p;
+    }
 
 
 }

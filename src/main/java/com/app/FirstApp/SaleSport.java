@@ -68,13 +68,12 @@ public class SaleSport {
 			if (userService.getUser("mohamed@gmail.com") == null){
 				List<Role> rolesUser2 = new ArrayList<>();
 				rolesUser2.add(new Role("ADMIN"));
-				User userSaved = userService.saveUser(new User("moetez", "mohamed@gmail.com", "123456789mm", rolesUser2));
+				User userSaved = userService.saveUser(new User("mohamed", "mohamed@gmail.com", "123456789mm", rolesUser2));
 				Acteur acteur = new Acteur();
 				acteur.setNom(userSaved.getName());
 				acteur.setEmail(userSaved.getEmail());
 				acteurServ.saveActeru(acteur);
 			}
-			userService.verifUser();
 
 		};
 	}
