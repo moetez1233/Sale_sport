@@ -64,21 +64,17 @@ public class SaleSport {
 	@Bean
 	CommandLineRunner run(UserService userService, DepotService depotService, ProduitService produitService, TierService tierService, FactureService factureService, ActeurServ acteurServ) {
 		return args -> {
-			//userService.saveRole(new Role("Add"));
-			//userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "12356sdf", new ArrayList<>()));
 
-			/*List<Role> roles = new ArrayList<>();
-			roles.add(new Role("ADMIN"));
-			System.out.println("role main : " + roles);
-			userService.saveUser(new User("Admin", "root@gmail.com", "root123", roles));
-			//System.out.println(userService.getUsers());
-			List<Role> rolesUser2 = new ArrayList<>();
-			rolesUser2.add(new Role("ADMIN"));
-			User userSaved = userService.saveUser(new User("moetez", "moetezmaddouri@gmail.com", "root123", rolesUser2));
-			Acteur acteur = new Acteur();
-			acteur.setNom(userSaved.getName());
-			acteur.setEmail(userSaved.getEmail());
-			acteurServ.saveActeru(acteur); */
+			if (userService.getUser("mohamed@gmail.com") == null){
+				List<Role> rolesUser2 = new ArrayList<>();
+				rolesUser2.add(new Role("ADMIN"));
+				User userSaved = userService.saveUser(new User("moetez", "mohamed@gmail.com", "123456789mm", rolesUser2));
+				Acteur acteur = new Acteur();
+				acteur.setNom(userSaved.getName());
+				acteur.setEmail(userSaved.getEmail());
+				acteurServ.saveActeru(acteur);
+			}
+			userService.verifUser();
 
 		};
 	}

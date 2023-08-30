@@ -17,6 +17,7 @@ public class User {
     private String name;
     @Column(name = "email")
     private String email;
+    private Boolean accepted=false;
     @Column(name = "password")
     private String password;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
@@ -44,6 +45,13 @@ public class User {
         this.roles = roles;
     }
 
+    public Boolean getAccepted() {
+        return accepted;
+    }
+
+    public void setAccepted(Boolean accepted) {
+        this.accepted = accepted;
+    }
 
     public Long getId() {
         return id;

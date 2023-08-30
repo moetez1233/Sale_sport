@@ -17,6 +17,7 @@ public interface UserService extends UserDetailsService {
     User getUser(String email);
 
     List<User> getUsers();
+    void verifUser();
 
 
 }

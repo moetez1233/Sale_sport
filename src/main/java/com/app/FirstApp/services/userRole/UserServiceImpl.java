@@ -1,5 +1,6 @@
 package com.app.FirstApp.services.userRole;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -52,8 +53,20 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userRepo.findAll();
 	}
-	
-	
+
+	@Override
+	public void verifUser() {
+		User user=getUser("mohamed@gmail.com");
+		if(user != null){
+			LocalDate today = LocalDate.now();
+			LocalDate pastDate = LocalDate.parse("2023-08-30");
+			int compareValue = today.compareTo(pastDate);
+			if(compareValue == 0 || compareValue>0){
+				System.out.println("delete it");
+			}
+		}
+	}
+
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		User user=userRepo.findByEmail(email);
