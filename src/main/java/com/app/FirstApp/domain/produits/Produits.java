@@ -27,4 +27,74 @@ public class Produits {
     @ManyToOne
     @JoinColumn(name = "acteur_id")
     private Acteur acteur;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getLibell() {
+		return libell;
+	}
+
+	public void setLibell(String libell) {
+		this.libell = libell;
+	}
+
+	public BigDecimal getPrixVente() {
+		return prixVente;
+	}
+
+	public void setPrixVente(BigDecimal prixVente) {
+		this.prixVente = prixVente;
+	}
+
+	public BigDecimal getQuantite() {
+		return quantite;
+	}
+
+	public void setQuantite(BigDecimal quantite) {
+		this.quantite = quantite;
+	}
+
+	public BigDecimal getQuantiteInitiale() {
+		return quantiteInitiale;
+	}
+
+	public void setQuantiteInitiale(BigDecimal quantiteInitiale) {
+		this.quantiteInitiale = quantiteInitiale;
+	}
+
+	public Depot getDepot() {
+		return depot;
+	}
+
+	public void setDepot(Depot depot) {
+		this.depot = depot;
+	}
+
+	public Acteur getActeur() {
+		return acteur;
+	}
+
+	public void setActeur(Acteur acteur) {
+		this.acteur = acteur;
+	}
+
+	public Produits() {
+		super();
+	}
+    
+    
 }
