@@ -70,6 +70,10 @@ public class FactureController {
     private ResponseEntity<List<FactureDto>> listFacture(){
         return new ResponseEntity<>(factureService.getListFactureDto(),HttpStatus.OK);
     }
+    @GetMapping("/{word}")
+    private ResponseEntity<List<FactureDto>> listFacture(@PathVariable String word){
+        return new ResponseEntity<>(factureService.getListFactureDtoByWord(word.toUpperCase()),HttpStatus.OK);
+    }
 
 
 

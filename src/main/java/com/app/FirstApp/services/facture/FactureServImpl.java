@@ -25,7 +25,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -68,6 +70,7 @@ public class FactureServImpl implements FactureService {
                 produitsListUpdatedQuantite.add(detailFact.getProduits());
                 detailFact.setFacture(factureSaved);
                 detailFact.setLibelleProduit(detailFact.getProduits().getLibell());
+                detailFact.setCodeProduit(detailFact.getProduits().getCode());
             }else{
 
                 new RuntimeException("Quantite produit insufffisante");
@@ -103,6 +106,7 @@ public class FactureServImpl implements FactureService {
                 detailFacture.setPrix(fctDto.getPrix());
                 detailFacture.setFacture(factureSaved);
                 detailFacture.setLibelleProduit(fctDto.getProduits().getLibell());
+                detailFacture.setCodeProduit(fctDto.getProduits().getCode());
                 detailFacturesList.add(detailFacture);
             }else{
 
@@ -129,7 +133,21 @@ public class FactureServImpl implements FactureService {
         });
         return factureDtoList;
     }
+    @Override
+    public List<FactureDto> getListFactureDtoByWord(String word) {
+        Acteur acteur=acteurServ.getUserConnected();
+        List<Facture>  factureList=factureRepo.getListFactureByActeurAndWords(acteur.getId(),word).orElseThrow(()-> new NotExisteException("Utilisateur n'existe pas"));
+        List<Long> idsFacture=factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
+        List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
+        List<FactureDto> factureDtoList=factureMapperService.listEntityFactureToDto(factureList);
+        this.userService.verifUser();
+        factureDtoList.forEach(facDto -> {
+            List<DetailFacture> detailFactures1=  detailFactures.stream().filter( df -> df.getFacture().getId().equals(facDto.getId())).collect(Collectors.toList());
+            facDto.setDetailFactures(detailFactureMapperService.ListEntityToDto(detailFactures1));
+        });
+        return factureDtoList;
+    }
     @Override
     public List<Facture> getAllFactures() {
         return factureRepo.getListFactureByActeur(acteurServ.getUserConnected().getId()).orElseThrow(() -> new NotExisteException("Facture n'existe pas "));
@@ -141,7 +159,7 @@ public class FactureServImpl implements FactureService {
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(new Date());
         String year = String.valueOf(calendar.get(Calendar.YEAR));
-        return year + "/" + numroFacture;
+        return year + "N" + numroFacture;
     }
 
     @Override
@@ -175,6 +193,16 @@ public class FactureServImpl implements FactureService {
         paramateres.put("dateFacture", java.sql.Date.valueOf(facture.getDateFacture()));
         paramateres.put("prixTotal", facture.getPrixTotale());
         paramateres.put("collectionBeanParam", dataSource);
+        paramateres.put("clientId", facture.getClient().getId());
+        paramateres.put("adressClient", facture.getClient().getAdress());
+
+        try {
+            BufferedImage image = ImageIO.read(getClass().getResource("/chakerJeux.PNG"));
+            paramateres.put("efacture-logo", image);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
 
         JasperDesign jasperDesign = JRXmlLoader.load(input);
 

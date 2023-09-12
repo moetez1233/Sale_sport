@@ -16,6 +16,7 @@ public interface FactureService {
     FactureDto saveFactureDto(FactureDto factureDto);
     FactureDto updateFactureDto(FactureDto factureDto);
     List<FactureDto> getListFactureDto();
+    List<FactureDto> getListFactureDtoByWord(String word);
     List<Facture> getAllFactures();
     String getNumeroFacture(Long acteurId);
     void deletFacture(Long factureId);

@@ -36,6 +36,7 @@
         <field name="libelleProduit" class="java.lang.String"/>
         <field name="quantite" class="java.math.BigDecimal"/>
         <field name="prix" class="java.math.BigDecimal"/>
+        <field name="codeProduit" class="java.lang.String"/>
     </subDataset>
     <parameter name="firstName" class="java.lang.String"/>
     <parameter name="lastNameClient" class="java.lang.String"/>
@@ -46,6 +47,9 @@
     <parameter name="numeroFacture" class="java.lang.String"/>
     <parameter name="dateFacture" class="java.sql.Date"/>
     <parameter name="collectionBeanParam" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+    <parameter name="clientId" class="java.lang.Long"/>
+    <parameter name="adressClient" class="java.lang.String"/>
+    <parameter name="efacture-logo" class="Object"/>
     <queryString>
         <![CDATA[]]>
     </queryString>
@@ -53,25 +57,53 @@
         <band splitType="Stretch"/>
     </background>
     <title>
-        <band height="62" splitType="Stretch">
+        <band height="86" splitType="Stretch">
             <frame>
-                <reportElement mode="Transparent" x="0" y="0" width="560" height="60" backcolor="#BCBFC2" uuid="48e17295-9a3b-4601-b31f-d4468f5fc321"/>
-                <staticText>
-                    <reportElement x="202" y="0" width="150" height="30" uuid="dc3fe4a6-8577-40ce-8fba-a3a83c28033e"/>
-                    <textElement>
-                        <font size="22"/>
-                    </textElement>
-                    <text><![CDATA[Facture Vente]]></text>
-                </staticText>
+                <reportElement mode="Transparent" x="-20" y="-20" width="595" height="106" backcolor="#BCBFC2" uuid="48e17295-9a3b-4601-b31f-d4468f5fc321"/>
                 <textField>
-                    <reportElement x="210" y="30" width="120" height="30" uuid="896d11fe-8ff4-4704-aaf4-8bda773e1ee3"/>
+                    <reportElement x="150" y="80" width="160" height="30" uuid="896d11fe-8ff4-4704-aaf4-8bda773e1ee3"/>
                     <textElement textAlignment="Center"/>
-                    <textFieldExpression><![CDATA["N°:"+$P{numeroFacture}]]></textFieldExpression>
+                    <textFieldExpression><![CDATA["Devis N°:"+$P{numeroFacture}]]></textFieldExpression>
                 </textField>
                 <textField>
-                    <reportElement x="460" y="5" width="100" height="20" uuid="cb434369-bd07-4ed5-aedb-16b7b68113a4"/>
-                    <textFieldExpression><![CDATA[$P{dateFacture}]]></textFieldExpression>
+                    <reportElement x="0" y="80" width="119" height="20" uuid="65ba6505-75cd-4232-9dd2-f6a395f82b07"/>
+                    <textFieldExpression><![CDATA["Date: "+$P{dateFacture}]]></textFieldExpression>
                 </textField>
+                <staticText>
+                    <reportElement x="100" y="0" width="290" height="30" uuid="9b4bcfe7-a33b-4965-a0ae-31670e168e3d"/>
+                    <textElement>
+                        <font size="18" isBold="true" isUnderline="false"/>
+                    </textElement>
+                    <text><![CDATA[CMG SPORT CLUB]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="100" y="26" width="326" height="54" uuid="ac49dbfd-efc9-456c-a095-eb24e94601b6"/>
+                    <textElement textAlignment="Left">
+                        <font size="9"/>
+                    </textElement>
+                    <text><![CDATA[Matricule fiscal : 000MP1723524/C
+Rue Fouchena, Mourouj 1, 2074, Ben Arous
+E-Mail: Medrezgi62@gmail.com
+RIB : 04047132008088919966
+
+
+]]></text>
+                </staticText>
+                <staticText>
+                    <reportElement x="434" y="30" width="147" height="54" uuid="dc669886-d9ea-46c0-91ac-93e9e30fdc3b"/>
+                    <textElement textAlignment="Right" verticalAlignment="Top">
+                        <font size="9"/>
+                    </textElement>
+                    <text><![CDATA[Tél: 54666058
+Tél: 98660343
+]]></text>
+                </staticText>
+                <image>
+                    <reportElement x="0" y="19" width="119" height="57" uuid="064ba934-f584-4770-b401-3c6e650cb580"/>
+                    <box padding="0"/>
+                    <imageExpression><![CDATA["src/main/resources/chakerJeux.PNG"]]></imageExpression>
+
+                </image>
             </frame>
         </band>
     </title>
@@ -82,72 +114,9 @@
         <band height="14" splitType="Stretch"/>
     </columnHeader>
     <detail>
-        <band height="344" splitType="Stretch">
-            <textField>
-                <reportElement x="89" y="40" width="90" height="18" uuid="73df53a9-9b50-48af-b997-2c0ee9024b01"/>
-                <textElement>
-                    <font size="13"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{firstName}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="89" y="70" width="100" height="19" uuid="9df27539-6466-4a25-860c-6f5c1a8d36f2"/>
-                <textElement>
-                    <font size="13"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{lastNameClient}]]></textFieldExpression>
-            </textField>
-            <staticText>
-                <reportElement x="40" y="40" width="49" height="30" uuid="9521175f-fdfc-4e5c-b518-0705931f4a96"/>
-                <text><![CDATA[Nom :]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="40" y="70" width="49" height="30" uuid="b3c45511-7e18-46ef-b521-89986442e276"/>
-                <text><![CDATA[Prénom :]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="40" y="100" width="59" height="30" uuid="8c8a0671-ed69-462d-9f70-21bdf4ed3305"/>
-                <text><![CDATA[Téléphone :]]></text>
-            </staticText>
-            <textField>
-                <reportElement x="100" y="100" width="100" height="30" uuid="ef0fee64-1dd8-45b1-a3f9-4830559aecc9"/>
-                <textFieldExpression><![CDATA[$P{phone}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="391" y="40" width="90" height="18" uuid="8ee55598-1943-4468-9cfa-91330355f02c"/>
-                <textElement>
-                    <font size="11"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{statusFacture}]]></textFieldExpression>
-            </textField>
-            <textField>
-                <reportElement x="430" y="70" width="100" height="19" uuid="14893dbe-42b0-460b-8e6f-9d32ea8e9ed8"/>
-                <textElement>
-                    <font size="11"/>
-                </textElement>
-                <textFieldExpression><![CDATA[$P{statusPaiementFacture}]]></textFieldExpression>
-            </textField>
-            <staticText>
-                <reportElement x="352" y="40" width="39" height="30" uuid="1649e1dc-f480-41ac-b3c2-4abe5ea06414"/>
-                <text><![CDATA[Status:]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="352" y="70" width="78" height="30" uuid="41cf4e18-aea7-49d7-9675-7c2d4ba93978"/>
-                <text><![CDATA[Status paiement:]]></text>
-            </staticText>
-            <staticText>
-                <reportElement x="352" y="100" width="59" height="30" uuid="34a67317-3ac9-49c3-bf62-cb7163af4a15"/>
-                <textElement>
-                    <font size="14" isBold="true" isUnderline="true"/>
-                </textElement>
-                <text><![CDATA[Prix totale :]]></text>
-            </staticText>
-            <textField>
-                <reportElement x="411" y="100" width="134" height="30" uuid="a9337748-d984-4926-8e0f-4bdf921cb5f5"/>
-                <textFieldExpression><![CDATA[$P{prixTotal}.doubleValue()]]></textFieldExpression>
-            </textField>
+        <band height="337" splitType="Stretch">
             <componentElement>
-                <reportElement mode="Opaque" x="33" y="160" width="478" height="60" backcolor="#F7F7FC" uuid="66652ac4-1e23-46b8-a89a-4a4dbeb7dd25">
+                <reportElement mode="Opaque" x="0" y="160" width="555" height="60" backcolor="#F7F7FC" uuid="66652ac4-1e23-46b8-a89a-4a4dbeb7dd25">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
                     <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -157,20 +126,20 @@
                     <datasetRun subDataset="detailFactures" uuid="de8a5a13-076d-4b65-b097-b66188320201">
                         <dataSourceExpression><![CDATA[$P{collectionBeanParam}]]></dataSourceExpression>
                     </datasetRun>
-                    <jr:column width="200" uuid="80fa487b-7c65-495f-b01f-2919276d8bd3">
+                    <jr:column width="160" uuid="80fa487b-7c65-495f-b01f-2919276d8bd3">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="200" height="30" uuid="dec69d82-9b69-4417-b408-10094d264e50"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="160" height="30" uuid="dec69d82-9b69-4417-b408-10094d264e50"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="16"/>
                                 </textElement>
-                                <text><![CDATA[Produit	]]></text>
+                                <text><![CDATA[Code]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="200" height="30" uuid="0a43bd37-e090-4e62-94ea-05660f234b2f"/>
+                                <reportElement x="0" y="0" width="160" height="30" uuid="0a43bd37-e090-4e62-94ea-05660f234b2f"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="14"/>
                                 </textElement>
@@ -182,11 +151,11 @@
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="120" height="30" uuid="c8c741ec-288f-4898-b2b2-05e4e6482016"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="120" height="30" uuid="c8c741ec-288f-4898-b2b2-05e4e6482016"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="16"/>
                                 </textElement>
-                                <text><![CDATA[Quantite]]></text>
+                                <text><![CDATA[Description]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
@@ -195,7 +164,7 @@
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="14"/>
                                 </textElement>
-                                <textFieldExpression><![CDATA[$F{quantite}]]></textFieldExpression>
+                                <textFieldExpression><![CDATA[$F{codeProduit}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
@@ -203,7 +172,28 @@
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement x="0" y="0" width="158" height="30" uuid="fde233f8-11e5-4302-a58c-02cc6d6f1568"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="158" height="30" forecolor="#050505" backcolor="#FFFFFF" uuid="fde233f8-11e5-4302-a58c-02cc6d6f1568"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font size="16"/>
+                                </textElement>
+                                <text><![CDATA[Quantité]]></text>
+                            </staticText>
+                        </jr:columnHeader>
+                        <jr:detailCell style="Table_TD" height="30">
+                            <textField>
+                                <reportElement x="0" y="0" width="158" height="30" uuid="3250de8c-9ab8-4b1f-a1b4-86f6b71a607d"/>
+                                <textElement textAlignment="Center" verticalAlignment="Middle">
+                                    <font size="14"/>
+                                </textElement>
+                                <textFieldExpression><![CDATA[$F{quantite}]]></textFieldExpression>
+                            </textField>
+                        </jr:detailCell>
+                    </jr:column>
+                    <jr:column width="130" uuid="598b5c18-fc31-4179-9555-18bd99971c7e">
+                        <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne4"/>
+                        <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
+                            <staticText>
+                                <reportElement mode="Opaque" x="0" y="0" width="130" height="30" uuid="3458e72f-2fc8-4785-b05c-b5bd82078f8b"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="16"/>
                                 </textElement>
@@ -212,7 +202,7 @@
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="158" height="30" uuid="3250de8c-9ab8-4b1f-a1b4-86f6b71a607d"/>
+                                <reportElement x="0" y="0" width="130" height="30" uuid="4954022d-b005-4152-826f-2f2a6b0886e9"/>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
                                     <font size="14"/>
                                 </textElement>
@@ -222,33 +212,93 @@
                     </jr:column>
                 </jr:table>
             </componentElement>
-            <staticText>
-                <reportElement x="40" y="130" width="160" height="30" uuid="e2dde68b-4d5e-4ce0-8f3e-bb54bf565b00"/>
-                <textElement>
+            <rectangle radius="8">
+                <reportElement x="250" y="40" width="305" height="100" uuid="258fea5a-ef1a-4ade-ba70-26c1d9765cfd"/>
+            </rectangle>
+            <textField>
+                <reportElement x="260" y="20" width="140" height="20" uuid="c7c8310b-385c-4637-8ef7-01379ce47a3c"/>
+                <textFieldExpression><![CDATA["Code Client:"+$P{clientId}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="300" y="50" width="244" height="21" uuid="3e4de369-ab5f-449d-b4fa-0d1b057ca6fb"/>
+                <textElement textAlignment="Center">
+                    <font size="11" isBold="true"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$P{lastNameClient}+" "+$P{firstName}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="280" y="80" width="261" height="31" uuid="d57a161c-975d-4e81-b7b5-eb5211bbc7fa"/>
+                <textElement textAlignment="Center">
                     <font size="16"/>
                 </textElement>
-                <text><![CDATA[Table Produits]]></text>
-            </staticText>
-            <staticText>
-                <reportElement mode="Opaque" x="33" y="0" width="478" height="30" forecolor="#000000" backcolor="#BFE1FF" uuid="3dfcbeff-311d-4bc6-9712-70d14d63e399"/>
-                <textElement textAlignment="Left" verticalAlignment="Middle" rotation="None">
-                    <font size="16"/>
+                <textFieldExpression><![CDATA[$P{adressClient}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="290" y="111" width="231" height="29" uuid="40bcb3c1-886d-4286-be3d-4ddaf9b98717"/>
+                <textElement textAlignment="Center">
+                    <font size="13"/>
                 </textElement>
-                <text><![CDATA[  Client                                                            Facture details]]></text>
-            </staticText>
+                <textFieldExpression><![CDATA["Tél : "+$P{phone}]]></textFieldExpression>
+            </textField>
         </band>
     </detail>
     <columnFooter>
-        <band height="45" splitType="Stretch"/>
+        <band height="181" splitType="Stretch">
+            <rectangle radius="3">
+                <reportElement x="0" y="100" width="171" height="81" uuid="9f9fd49d-9e79-4b68-807f-f17b3f9a371d"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="20" y="100" width="121" height="21" uuid="61cd7ab5-f98d-498c-be19-53ceaed62760"/>
+                <textElement textAlignment="Center">
+                    <font size="9"/>
+                </textElement>
+                <text><![CDATA[Réglement
+]]></text>
+            </staticText>
+            <rectangle radius="3">
+                <reportElement x="180" y="100" width="181" height="57" uuid="a44908f4-b692-4108-aa59-114a0edf3a9a"/>
+            </rectangle>
+            <staticText>
+                <reportElement x="210" y="100" width="111" height="21" uuid="17ffd2b6-67b0-4274-aeb3-fe02bdf7ce6d"/>
+                <textElement textAlignment="Center">
+                    <font size="9"/>
+                </textElement>
+                <text><![CDATA[Signature Client
+]]></text>
+            </staticText>
+            <rectangle radius="3">
+                <reportElement x="370" y="96" width="191" height="81" uuid="aa59287f-ee81-4757-af2a-768bea0c7e46"/>
+                <graphicElement>
+                    <pen lineWidth="1.0"/>
+                </graphicElement>
+            </rectangle>
+            <staticText>
+                <reportElement x="396" y="96" width="149" height="24" uuid="c322334a-b0e6-46a6-a1c3-d7e5e82767a0"/>
+                <textElement textAlignment="Center">
+                    <font size="9"/>
+                </textElement>
+                <text><![CDATA[Signature & cachet
+
+]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="330" y="30" width="204" height="50" uuid="f1864947-162a-484d-9c9b-1fa54f73346e"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font size="14"/>
+                </textElement>
+                <textFieldExpression><![CDATA["TVA : 0%"+ "\n"+
+"Net à payer: "+$P{prixTotal}.doubleValue()]]></textFieldExpression>
+            </textField>
+        </band>
     </columnFooter>
     <pageFooter>
         <band height="39" splitType="Stretch">
             <textField evaluationTime="Report">
-                <reportElement mode="Opaque" x="515" y="14" width="40" height="13" backcolor="#BFE1FF" uuid="431b933a-d936-4f45-883f-14631b98a8b1"/>
+                <reportElement mode="Opaque" x="515" y="14" width="40" height="13" backcolor="#E6E6E6" uuid="431b933a-d936-4f45-883f-14631b98a8b1"/>
                 <textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement mode="Opaque" x="0" y="14" width="515" height="13" backcolor="#BFE1FF" uuid="7f49f696-b46d-49a2-b851-60f427685c65"/>
+                <reportElement mode="Opaque" x="0" y="14" width="515" height="13" backcolor="#E6E6E6" uuid="7f49f696-b46d-49a2-b851-60f427685c65"/>
                 <textElement textAlignment="Right"/>
                 <textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" of"]]></textFieldExpression>
             </textField>

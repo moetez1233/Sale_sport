@@ -19,6 +19,7 @@ public class DetailFacture {
     private BigDecimal quantite;
     private BigDecimal prix;
     private String libelleProduit;
+    private String codeProduit;
 
     @ManyToOne
     @JoinColumn(name = "produit_id")

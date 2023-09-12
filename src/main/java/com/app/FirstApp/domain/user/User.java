@@ -17,6 +17,11 @@ public class User {
     private String name;
     @Column(name = "email")
     private String email;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    private String adresse;
     private Boolean accepted=false;
     @Column(name = "password")
     private String password;
@@ -51,6 +56,22 @@ public class User {
 
     public void setAccepted(Boolean accepted) {
         this.accepted = accepted;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(String adresse) {
+        this.adresse = adresse;
     }
 
     public Long getId() {

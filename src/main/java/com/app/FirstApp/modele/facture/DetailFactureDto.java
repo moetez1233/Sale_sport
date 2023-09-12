@@ -13,6 +13,7 @@ public class DetailFactureDto {
     private BigDecimal quantite;
     private BigDecimal prix;
     private String libelleProduit;
+    private String codeProduit;
     private Produits produits;
 	public Long getId() {
 		return id;

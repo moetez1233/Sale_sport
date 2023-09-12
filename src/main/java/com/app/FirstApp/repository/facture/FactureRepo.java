@@ -13,6 +13,9 @@ public interface FactureRepo extends JpaRepository<Facture,Long> {
     @Query(value = "select * from facture where acteur_id =:acteurId order by facture_id desc ",nativeQuery = true)
     Optional<List<Facture>> getListFactureByActeur(@Param("acteurId") Long acteruId);
 
+    @Query(value = "select * from facture where acteur_id =:acteurId and numero like %:word% order by facture_id desc ",nativeQuery = true)
+    Optional<List<Facture>> getListFactureByActeurAndWords(@Param("acteurId") Long acteruId,@Param("word") String word);
+
     @Query(value = "select * from facture where facture_id =:factureId",nativeQuery = true)
     Optional<Facture> getFacturewithId(@Param("factureId") Long factureId);
 
