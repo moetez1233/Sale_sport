@@ -9,4 +9,7 @@ import java.util.Set;
 public interface DetailFactureServ {
     List<DetailFacture> saveDetailleFacture(List<DetailFacture> detailFactures);
     Set<DetailFacture> getSetDetailFactures(Long factureId);
+    void deleteDetailFacture(Long id);
+    void deleteDetailFactureByProduitId(List<Long> produitIds);
+    void deleteDetailFacture(List<Long> ids);
 }

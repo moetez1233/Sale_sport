@@ -15,6 +15,13 @@ public class GlobalException {
 
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorHandler> handleInvalidResourceExcception(InvalidResourceException notExisteException) {
+        ErrorHandler errorHandler = new ErrorHandler(HttpStatus.BAD_REQUEST.value(), notExisteException.getMessage(), System.currentTimeMillis());
+        return new ResponseEntity<>(errorHandler, HttpStatus.BAD_REQUEST);
+
+    }
+
     public ResponseEntity<ErrorHandler> handelRuntimeException(RuntimeException exception){
         ErrorHandler errorHandler = new ErrorHandler(HttpStatus.NOT_ACCEPTABLE.value(),exception.getMessage(),System.currentTimeMillis());
         return new ResponseEntity<>(errorHandler,HttpStatus.NOT_ACCEPTABLE);
