@@ -174,7 +174,7 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public void deletFacture(Long factureId) {
-        Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("Facture non existe"));
+        Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("Facture n'existe pas"));
         Set<DetailFacture> detailFactureList = detailFactureRepo.getAllByFactureID(factureId).orElseThrow(() -> new NotExisteException("Details factures non existe"));
         detailFactureRepo.deleteAllById(detailFactureList.stream().map(d -> d.getId()).collect(Collectors.toList()));
         factureRepo.delete(facture);
@@ -194,18 +194,7 @@ public class FactureServImpl implements FactureService {
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(detailFactureList);
         // add parametres to pdf file
         Map<String, Object> paramateres = new HashMap<>();
-        paramateres.put("firstName", facture.getClient().getNom());
-        paramateres.put("phone", facture.getClient().getNumeroTel());
-        paramateres.put("lastNameClient", facture.getClient().getPrenom());
-        paramateres.put("statusFacture", facture.getStatusFacture().toString());
-        paramateres.put("statusPaiementFacture", facture.getStatusPaiementFacture().toString());
-        paramateres.put("numeroFacture", facture.getNumero());
-        paramateres.put("dateFacture", java.sql.Date.valueOf(facture.getDateFacture()));
-        paramateres.put("prixTotal", facture.getPrixTotale());
-        paramateres.put("collectionBeanParam", dataSource);
-        paramateres.put("clientId", facture.getClient().getId());
-        paramateres.put("adressClient", facture.getClient().getAdress());
-
+        getParams(paramateres,facture ,dataSource);
         try {
             BufferedImage image = ImageIO.read(getClass().getResource("/chakerJeux.PNG"));
             paramateres.put("efacture-logo", image);
@@ -243,4 +232,19 @@ public class FactureServImpl implements FactureService {
         os.write(pdfAsStream);
         os.close();
     }
+    void getParams(Map<String, Object> paramateres,Facture facture,JRBeanCollectionDataSource dataSource){
+
+        paramateres.put("firstName", facture.getClient().getNom());
+        paramateres.put("phone", facture.getClient().getNumeroTel());
+        paramateres.put("lastNameClient", facture.getClient().getPrenom());
+        paramateres.put("statusFacture", facture.getStatusFacture().toString());
+        paramateres.put("statusPaiementFacture", facture.getStatusPaiementFacture().toString());
+        paramateres.put("numeroFacture", facture.getNumero());
+        paramateres.put("dateFacture", java.sql.Date.valueOf(facture.getDateFacture()));
+        paramateres.put("prixTotal", facture.getPrixTotale());
+        paramateres.put("collectionBeanParam", dataSource);
+        paramateres.put("clientId", facture.getClient().getId());
+        paramateres.put("adressClient", facture.getClient().getAdress());
+    }
+
 }
