@@ -183,7 +183,7 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException {
-        Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("Facture n'existe pas"));
+        Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("facture : "+factureId+" n'existe pas"));
         List<DetailFacture> detailFactureList = new ArrayList<>(detailFactureRepo.getAllByFactureID(factureId).get());
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
