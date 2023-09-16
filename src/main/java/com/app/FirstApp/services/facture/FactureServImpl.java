@@ -78,11 +78,7 @@ public class FactureServImpl implements FactureService {
         Facture factureSaved = factureRepo.save(facture);
         List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
         detailFacturesList.forEach(detailFact -> {
-            BigDecimal quantiteFacture = new BigDecimal((detailFact.getProduits().getQuantite().intValue() -detailFact.getQuantite().intValue()));
-
-                //detailFact.getProduits().setQuantite(quantiteFacture);
                 produitsListUpdatedQuantite.add(detailFact.getProduits());
-
                 detailFact.setLibelleProduit(detailFact.getProduits().getLibell());
                 detailFact.setCodeProduit(detailFact.getProduits().getCode());
 
@@ -91,6 +87,7 @@ public class FactureServImpl implements FactureService {
         produitRepo.saveAll(produitsListUpdatedQuantite);
         return factureMapperService.entityFactureToDto(factureSaved);
     }
+
 
     @Override
     @Transactional
