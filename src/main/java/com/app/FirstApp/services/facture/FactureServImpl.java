@@ -190,9 +190,7 @@ public class FactureServImpl implements FactureService {
         byte[] bytes;
         File file = ResourceUtils.getFile("classpath:jasperFiles/factureVenteTemp.jrxml");
         InputStream input = new FileInputStream(file);
-        // JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(detailFactureList);
-        // add parametres to pdf file
         Map<String, Object> paramateres = new HashMap<>();
         getParams(paramateres,facture ,dataSource);
         try {
