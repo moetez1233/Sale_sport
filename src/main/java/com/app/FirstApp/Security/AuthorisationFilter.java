@@ -1,4 +1,4 @@
-package com.app.FirstApp.Security;
+package com.app.FirstApp.security;
 
 import com.app.FirstApp.domain.role.Role;
 import com.auth0.jwt.JWT;
@@ -44,7 +44,7 @@ public class AuthorisationFilter extends OncePerRequestFilter {
 		httpServletResponse.setHeader("Access-Control-Allow-Credentials", "*");
 		httpServletResponse.setHeader("Access-Control-Max-Age", "3600");
 		
-		if (request.getServletPath().equals("/login") || request.getServletPath().equals("/api/token/refresh") ) {
+		if (request.getServletPath().equals("/login") || request.getServletPath().equals("/api/token/refresh") || request.getServletPath().equals("/manage")) {
 
 			filterChain.doFilter(request, response); // let user connect
 		} else {

@@ -1,4 +1,4 @@
-package com.app.FirstApp.Security;
+package com.app.FirstApp.security;
 
 import com.app.FirstApp.services.userRole.UserService;
 import org.springframework.context.annotation.Bean;
@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests().anyRequest().authenticated().and().cors();*/
 	
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers("/login","/api/token/refresh/**").permitAll();
+		http.authorizeRequests().antMatchers("/login","/api/token/refresh/**","/manage/**").permitAll();
 
 
 		http.csrf().disable()
