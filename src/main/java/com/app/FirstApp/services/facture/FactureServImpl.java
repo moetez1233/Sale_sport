@@ -129,7 +129,7 @@ public class FactureServImpl implements FactureService {
     @Override
     public List<FactureDto> getListFactureDto() {
         Acteur acteur = acteurServ.getUserConnected();
-        List<Facture> factureList = factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(() -> new NotExisteException("Utilisateur n'existe pas"));
+        List<Facture> factureList = factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(() -> new NotExisteException("Utilisateur"+ acteur.getEmail()+" n'existe pas"));
         List<Long> idsFacture = factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
         List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
