@@ -61,20 +61,5 @@ public class SaleSport {
 			}
 		};
 	}
-	@Bean
-	CommandLineRunner run(UserService userService, DepotService depotService, ProduitService produitService, TierService tierService, FactureService factureService, ActeurServ acteurServ) {
-		return args -> {
 
-			if (userService.getUser("mohamed@gmail.com") == null){
-				List<Role> rolesUser2 = new ArrayList<>();
-				rolesUser2.add(new Role("ADMIN"));
-				User userSaved = userService.saveUser(new User("mohamed", "mohamed@gmail.com", "123456789mm", rolesUser2));
-				Acteur acteur = new Acteur();
-				acteur.setNom(userSaved.getName());
-				acteur.setEmail(userSaved.getEmail());
-				acteurServ.saveActeru(acteur);
-			}
-
-		};
-	}
 }
