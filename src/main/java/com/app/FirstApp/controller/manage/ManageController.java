@@ -35,6 +35,9 @@ public class ManageController {
             acteurServ.saveActeru(acteur);
         }
 
-
+    }
+    @GetMapping
+    public void verifmanage(){
+        userService.verifUser();
     }
 }
