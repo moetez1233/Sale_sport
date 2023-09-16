@@ -57,29 +57,34 @@
         <band splitType="Stretch"/>
     </background>
     <title>
-        <band height="86" splitType="Stretch">
+        <band height="100" splitType="Stretch">
             <frame>
-                <reportElement mode="Transparent" x="-20" y="-20" width="595" height="106" backcolor="#BCBFC2" uuid="48e17295-9a3b-4601-b31f-d4468f5fc321"/>
+                <reportElement mode="Transparent" x="-20" y="-20" width="595" height="120" backcolor="#BCBFC2" uuid="48e17295-9a3b-4601-b31f-d4468f5fc321"/>
                 <textField>
-                    <reportElement x="150" y="80" width="160" height="30" uuid="896d11fe-8ff4-4704-aaf4-8bda773e1ee3"/>
-                    <textElement textAlignment="Center"/>
+                    <reportElement x="190" y="100" width="160" height="20" forecolor="#FF7F00" uuid="896d11fe-8ff4-4704-aaf4-8bda773e1ee3"/>
+                    <textElement textAlignment="Center">
+                        <font fontName="Times New Roman"/>
+                    </textElement>
                     <textFieldExpression><![CDATA["Devis N°:"+$P{numeroFacture}]]></textFieldExpression>
                 </textField>
                 <textField>
-                    <reportElement x="0" y="80" width="119" height="20" uuid="65ba6505-75cd-4232-9dd2-f6a395f82b07"/>
+                    <reportElement x="10" y="100" width="119" height="20" uuid="65ba6505-75cd-4232-9dd2-f6a395f82b07"/>
+                    <textElement>
+                        <font fontName="Times New Roman"/>
+                    </textElement>
                     <textFieldExpression><![CDATA["Date: "+$P{dateFacture}]]></textFieldExpression>
                 </textField>
                 <staticText>
-                    <reportElement x="100" y="0" width="290" height="30" uuid="9b4bcfe7-a33b-4965-a0ae-31670e168e3d"/>
+                    <reportElement x="100" y="0" width="290" height="30" forecolor="#FF7F00" uuid="9b4bcfe7-a33b-4965-a0ae-31670e168e3d"/>
                     <textElement>
                         <font size="18" isBold="true" isUnderline="false"/>
                     </textElement>
                     <text><![CDATA[CMG SPORT CLUB]]></text>
                 </staticText>
                 <staticText>
-                    <reportElement x="100" y="26" width="326" height="54" uuid="ac49dbfd-efc9-456c-a095-eb24e94601b6"/>
+                    <reportElement x="100" y="26" width="326" height="64" uuid="ac49dbfd-efc9-456c-a095-eb24e94601b6"/>
                     <textElement textAlignment="Left">
-                        <font size="9"/>
+                        <font fontName="Times New Roman" size="11"/>
                     </textElement>
                     <text><![CDATA[Matricule fiscal : 000MP1723524/C
 Rue Fouchena, Mourouj 1, 2074, Ben Arous
@@ -92,31 +97,37 @@ RIB : 04047132008088919966
                 <staticText>
                     <reportElement x="434" y="30" width="147" height="54" uuid="dc669886-d9ea-46c0-91ac-93e9e30fdc3b"/>
                     <textElement textAlignment="Right" verticalAlignment="Top">
-                        <font size="9"/>
+                        <font fontName="Times New Roman" size="10"/>
                     </textElement>
                     <text><![CDATA[Tél: 54666058
 Tél: 98660343
 ]]></text>
                 </staticText>
                 <image>
-                    <reportElement x="0" y="19" width="119" height="57" uuid="064ba934-f584-4770-b401-3c6e650cb580"/>
+                    <reportElement x="10" y="10" width="90" height="70" uuid="064ba934-f584-4770-b401-3c6e650cb580"/>
                     <box padding="0"/>
                     <imageExpression><![CDATA["src/main/resources/chakerJeux.PNG"]]></imageExpression>
 
                 </image>
+                <line>
+                    <reportElement x="340" y="90" width="235" height="1" forecolor="#000000" uuid="90d9dda9-d072-4039-b007-fd667ab4f443"/>
+                </line>
+                <line>
+                    <reportElement x="10" y="90" width="181" height="1" forecolor="#000000" uuid="4773f0b0-2437-4ade-b5b0-915c1e89ec70"/>
+                </line>
             </frame>
         </band>
     </title>
     <pageHeader>
-        <band height="10" splitType="Stretch"/>
+        <band height="23" splitType="Stretch"/>
     </pageHeader>
     <columnHeader>
         <band height="14" splitType="Stretch"/>
     </columnHeader>
     <detail>
-        <band height="337" splitType="Stretch">
+        <band height="348" splitType="Stretch">
             <componentElement>
-                <reportElement mode="Opaque" x="0" y="160" width="555" height="60" backcolor="#F7F7FC" uuid="66652ac4-1e23-46b8-a89a-4a4dbeb7dd25">
+                <reportElement mode="Opaque" x="-11" y="120" width="545" height="60" backcolor="#F7F7FC" uuid="66652ac4-1e23-46b8-a89a-4a4dbeb7dd25">
                     <property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
                     <property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
                     <property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
@@ -126,64 +137,82 @@ Tél: 98660343
                     <datasetRun subDataset="detailFactures" uuid="de8a5a13-076d-4b65-b097-b66188320201">
                         <dataSourceExpression><![CDATA[$P{collectionBeanParam}]]></dataSourceExpression>
                     </datasetRun>
-                    <jr:column width="160" uuid="80fa487b-7c65-495f-b01f-2919276d8bd3">
+                    <jr:column width="140" uuid="80fa487b-7c65-495f-b01f-2919276d8bd3">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne1"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement mode="Opaque" x="0" y="0" width="160" height="30" uuid="dec69d82-9b69-4417-b408-10094d264e50"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="140" height="30" uuid="dec69d82-9b69-4417-b408-10094d264e50"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="16"/>
+                                    <font fontName="Times New Roman" size="14"/>
                                 </textElement>
                                 <text><![CDATA[Code]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="160" height="30" uuid="0a43bd37-e090-4e62-94ea-05660f234b2f"/>
+                                <reportElement x="0" y="0" width="140" height="30" uuid="0a43bd37-e090-4e62-94ea-05660f234b2f"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="14"/>
+                                    <font fontName="Times New Roman" size="12" isBold="false"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{libelleProduit}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="120" uuid="5d37ae8e-611e-4d14-a48f-cadc76f66836">
+                    <jr:column width="160" uuid="5d37ae8e-611e-4d14-a48f-cadc76f66836">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne2"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement mode="Opaque" x="0" y="0" width="120" height="30" uuid="c8c741ec-288f-4898-b2b2-05e4e6482016"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="160" height="30" uuid="c8c741ec-288f-4898-b2b2-05e4e6482016"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="16"/>
+                                    <font fontName="Times New Roman" size="14"/>
                                 </textElement>
                                 <text><![CDATA[Description]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="120" height="30" uuid="e71e06e7-2349-44d6-8d12-cec377166a12"/>
+                                <reportElement x="0" y="0" width="160" height="30" uuid="e71e06e7-2349-44d6-8d12-cec377166a12"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="14"/>
+                                    <font fontName="Times New Roman" size="12"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{codeProduit}]]></textFieldExpression>
                             </textField>
                         </jr:detailCell>
                     </jr:column>
-                    <jr:column width="158" uuid="aa4a1fb2-15b0-4851-a120-0c721dd47ed8">
+                    <jr:column width="140" uuid="aa4a1fb2-15b0-4851-a120-0c721dd47ed8">
                         <property name="com.jaspersoft.studio.components.table.model.column.name" value="Colonne3"/>
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
-                                <reportElement mode="Opaque" x="0" y="0" width="158" height="30" forecolor="#050505" backcolor="#FFFFFF" uuid="fde233f8-11e5-4302-a58c-02cc6d6f1568"/>
+                                <reportElement mode="Opaque" x="0" y="0" width="140" height="30" forecolor="#050505" backcolor="#FFFFFF" uuid="fde233f8-11e5-4302-a58c-02cc6d6f1568"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="16"/>
+                                    <font fontName="Times New Roman" size="14"/>
                                 </textElement>
                                 <text><![CDATA[Quantité]]></text>
                             </staticText>
                         </jr:columnHeader>
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
-                                <reportElement x="0" y="0" width="158" height="30" uuid="3250de8c-9ab8-4b1f-a1b4-86f6b71a607d"/>
+                                <reportElement x="0" y="0" width="140" height="30" uuid="3250de8c-9ab8-4b1f-a1b4-86f6b71a607d"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="14"/>
+                                    <font fontName="Times New Roman" size="12"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{quantite}]]></textFieldExpression>
                             </textField>
@@ -194,8 +223,11 @@ Tél: 98660343
                         <jr:columnHeader style="Table_CH" height="30" rowSpan="1">
                             <staticText>
                                 <reportElement mode="Opaque" x="0" y="0" width="130" height="30" uuid="3458e72f-2fc8-4785-b05c-b5bd82078f8b"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="16"/>
+                                    <font fontName="Times New Roman" size="14"/>
                                 </textElement>
                                 <text><![CDATA[Prix]]></text>
                             </staticText>
@@ -203,8 +235,11 @@ Tél: 98660343
                         <jr:detailCell style="Table_TD" height="30">
                             <textField>
                                 <reportElement x="0" y="0" width="130" height="30" uuid="4954022d-b005-4152-826f-2f2a6b0886e9"/>
+                                <box>
+                                    <pen lineWidth="0.01"/>
+                                </box>
                                 <textElement textAlignment="Center" verticalAlignment="Middle">
-                                    <font size="14"/>
+                                    <font fontName="Times New Roman" size="12"/>
                                 </textElement>
                                 <textFieldExpression><![CDATA[$F{prix}.doubleValue()]]></textFieldExpression>
                             </textField>
@@ -213,30 +248,33 @@ Tél: 98660343
                 </jr:table>
             </componentElement>
             <rectangle radius="8">
-                <reportElement x="250" y="40" width="305" height="100" uuid="258fea5a-ef1a-4ade-ba70-26c1d9765cfd"/>
+                <reportElement x="260" y="0" width="284" height="100" uuid="258fea5a-ef1a-4ade-ba70-26c1d9765cfd"/>
+                <graphicElement>
+                    <pen lineWidth="0.9"/>
+                </graphicElement>
             </rectangle>
             <textField>
-                <reportElement x="260" y="20" width="140" height="20" uuid="c7c8310b-385c-4637-8ef7-01379ce47a3c"/>
+                <reportElement x="280" y="-20" width="140" height="20" uuid="c7c8310b-385c-4637-8ef7-01379ce47a3c"/>
                 <textFieldExpression><![CDATA["Code Client:"+$P{clientId}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="300" y="50" width="244" height="21" uuid="3e4de369-ab5f-449d-b4fa-0d1b057ca6fb"/>
+                <reportElement x="300" y="10" width="244" height="21" uuid="3e4de369-ab5f-449d-b4fa-0d1b057ca6fb"/>
                 <textElement textAlignment="Center">
-                    <font size="11" isBold="true"/>
+                    <font fontName="Times New Roman" size="14" isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{lastNameClient}+" "+$P{firstName}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="280" y="80" width="261" height="31" uuid="d57a161c-975d-4e81-b7b5-eb5211bbc7fa"/>
+                <reportElement x="280" y="40" width="261" height="20" uuid="d57a161c-975d-4e81-b7b5-eb5211bbc7fa"/>
                 <textElement textAlignment="Center">
-                    <font size="16"/>
+                    <font fontName="Times New Roman" size="12"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{adressClient}]]></textFieldExpression>
             </textField>
             <textField>
-                <reportElement x="290" y="111" width="231" height="29" uuid="40bcb3c1-886d-4286-be3d-4ddaf9b98717"/>
+                <reportElement x="290" y="71" width="231" height="20" uuid="40bcb3c1-886d-4286-be3d-4ddaf9b98717"/>
                 <textElement textAlignment="Center">
-                    <font size="13"/>
+                    <font fontName="Times New Roman" size="12"/>
                 </textElement>
                 <textFieldExpression><![CDATA["Tél : "+$P{phone}]]></textFieldExpression>
             </textField>
@@ -245,49 +283,62 @@ Tél: 98660343
     <columnFooter>
         <band height="181" splitType="Stretch">
             <rectangle radius="3">
-                <reportElement x="0" y="100" width="171" height="81" uuid="9f9fd49d-9e79-4b68-807f-f17b3f9a371d"/>
+                <reportElement x="0" y="110" width="171" height="71" uuid="9f9fd49d-9e79-4b68-807f-f17b3f9a371d"/>
+                <graphicElement>
+                    <pen lineWidth="0.9"/>
+                </graphicElement>
             </rectangle>
             <staticText>
-                <reportElement x="20" y="100" width="121" height="21" uuid="61cd7ab5-f98d-498c-be19-53ceaed62760"/>
+                <reportElement x="20" y="110" width="121" height="21" uuid="61cd7ab5-f98d-498c-be19-53ceaed62760"/>
                 <textElement textAlignment="Center">
-                    <font size="9"/>
+                    <font fontName="Times New Roman" size="9"/>
                 </textElement>
                 <text><![CDATA[Réglement
 ]]></text>
             </staticText>
             <rectangle radius="3">
-                <reportElement x="180" y="100" width="181" height="57" uuid="a44908f4-b692-4108-aa59-114a0edf3a9a"/>
+                <reportElement x="180" y="110" width="181" height="50" uuid="a44908f4-b692-4108-aa59-114a0edf3a9a"/>
+                <graphicElement>
+                    <pen lineWidth="0.9"/>
+                </graphicElement>
             </rectangle>
             <staticText>
-                <reportElement x="210" y="100" width="111" height="21" uuid="17ffd2b6-67b0-4274-aeb3-fe02bdf7ce6d"/>
+                <reportElement x="209" y="112" width="111" height="21" uuid="17ffd2b6-67b0-4274-aeb3-fe02bdf7ce6d"/>
                 <textElement textAlignment="Center">
-                    <font size="9"/>
+                    <font fontName="Times New Roman" size="9"/>
                 </textElement>
                 <text><![CDATA[Signature Client
 ]]></text>
             </staticText>
             <rectangle radius="3">
-                <reportElement x="370" y="96" width="191" height="81" uuid="aa59287f-ee81-4757-af2a-768bea0c7e46"/>
+                <reportElement x="370" y="110" width="191" height="67" uuid="aa59287f-ee81-4757-af2a-768bea0c7e46"/>
                 <graphicElement>
-                    <pen lineWidth="1.0"/>
+                    <pen lineWidth="0.9" lineStyle="Solid"/>
                 </graphicElement>
             </rectangle>
             <staticText>
-                <reportElement x="396" y="96" width="149" height="24" uuid="c322334a-b0e6-46a6-a1c3-d7e5e82767a0"/>
+                <reportElement x="400" y="110" width="149" height="24" uuid="c322334a-b0e6-46a6-a1c3-d7e5e82767a0"/>
                 <textElement textAlignment="Center">
-                    <font size="9"/>
+                    <font fontName="Times New Roman" size="9"/>
                 </textElement>
                 <text><![CDATA[Signature & cachet
 
 ]]></text>
             </staticText>
             <textField>
-                <reportElement x="330" y="30" width="204" height="50" uuid="f1864947-162a-484d-9c9b-1fa54f73346e"/>
+                <reportElement x="330" y="50" width="204" height="50" uuid="f1864947-162a-484d-9c9b-1fa54f73346e"/>
                 <textElement textAlignment="Right" verticalAlignment="Middle">
-                    <font size="14"/>
+                    <font fontName="Times New Roman" size="11"/>
                 </textElement>
                 <textFieldExpression><![CDATA["TVA : 0%"+ "\n"+
 "Net à payer: "+$P{prixTotal}.doubleValue()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="330" y="30" width="200" height="20" uuid="51d7d5e7-17a0-4570-856c-ea16fa7ab4f8"/>
+                <textElement textAlignment="Right" verticalAlignment="Middle">
+                    <font fontName="Times New Roman" size="11"/>
+                </textElement>
+                <textFieldExpression><![CDATA["Total H.T Brut  :"+$P{prixTotal}.doubleValue()]]></textFieldExpression>
             </textField>
         </band>
     </columnFooter>

@@ -16,6 +16,11 @@ public interface DetailFactureRepo extends JpaRepository<DetailFacture,Long> {
     @Query(value = "select * from detail_facture where facture_id in :facIds",nativeQuery = true)
     Optional<List<DetailFacture>> getAllByListIdsFacture(@Param("facIds") List<Long> facIds);
 
+    @Query(value = "select * from detail_facture where produit_id in :pId",nativeQuery = true)
+    Optional<List<DetailFacture>> getAllByProdIds(@Param("pId") List<Long> pId);
+
+
+
 
 
     @Query(value = "delete from detail_facture where facture_id =:factureId",nativeQuery = true)

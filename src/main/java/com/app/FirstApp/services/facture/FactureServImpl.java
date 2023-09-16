@@ -1,5 +1,6 @@
 package com.app.FirstApp.services.facture;
 
+import com.app.FirstApp.config.customException.InvalidResourceException;
 import com.app.FirstApp.config.customException.NotExisteException;
 import com.app.FirstApp.domain.acteur.Acteur;
 import com.app.FirstApp.domain.facture.DetailFacture;
@@ -13,6 +14,7 @@ import com.app.FirstApp.repository.facture.DetailFactureRepo;
 import com.app.FirstApp.repository.facture.FactureRepo;
 import com.app.FirstApp.repository.produit.ProduitRepo;
 import com.app.FirstApp.services.Acteur.ActeurServ;
+import com.app.FirstApp.services.produit.ProduitService;
 import com.app.FirstApp.services.userRole.UserService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
@@ -49,32 +51,41 @@ public class FactureServImpl implements FactureService {
     private ProduitRepo produitRepo;
     @Autowired
     private FactureMapperService factureMapperService;
-
+    @Autowired
+    private ProduitService produitService;
+    @Autowired
+    private DetailFactureServ detailFactureServ;
     @Autowired
     DetailFactureMapperService detailFactureMapperService;
-
 
 
     @Override
     @Transactional
     public FactureDto updateFactureDto(FactureDto factureDto) {
         Facture facture = factureMapperService.dtoFactureToEntity(factureDto);
-        List<DetailFacture> detailFacturesList=detailFactureMapperService.ListDtoToEntity(factureDto.getDetailFactures());
+        Set<Long> idsDetailToUpdate=factureDto.getDetailFactures().stream().map(d -> d.getId()).collect(Collectors.toSet());
+        Set<DetailFacture> detailFactures=detailFactureServ.getSetDetailFactures(factureDto.getId());
+        Set<Long> idsDetailToDelete=new HashSet<>();
+        detailFactures.forEach(d -> {
+            if(!idsDetailToUpdate.contains(d.getId())){
+                idsDetailToDelete.add(d.getId());
+            }
+        });
+        detailFactureServ.deleteDetailFacture(new ArrayList<>(idsDetailToDelete));
+
+        List<DetailFacture> detailFacturesList = detailFactureMapperService.ListDtoToEntity(factureDto.getDetailFactures());
         facture.setActeur(acteurServ.getUserConnected());
         Facture factureSaved = factureRepo.save(facture);
         List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
         detailFacturesList.forEach(detailFact -> {
-            BigDecimal quantiteFacture = (detailFact.getProduits().getQuantite().subtract(detailFact.getQuantite()));
-            if (quantiteFacture.compareTo(BigDecimal.ZERO)==0 || quantiteFacture.compareTo(BigDecimal.ZERO)==1) {
-                detailFact.getProduits().setQuantite(quantiteFacture);
+            BigDecimal quantiteFacture = new BigDecimal((detailFact.getProduits().getQuantite().intValue() -detailFact.getQuantite().intValue()));
+
+                //detailFact.getProduits().setQuantite(quantiteFacture);
                 produitsListUpdatedQuantite.add(detailFact.getProduits());
-                detailFact.setFacture(factureSaved);
+
                 detailFact.setLibelleProduit(detailFact.getProduits().getLibell());
                 detailFact.setCodeProduit(detailFact.getProduits().getCode());
-            }else{
 
-                new RuntimeException("Quantite produit insufffisante");
-            }
         });
         detailFactureRepo.saveAll(detailFacturesList);
         produitRepo.saveAll(produitsListUpdatedQuantite);
@@ -98,7 +109,7 @@ public class FactureServImpl implements FactureService {
         detailFacturesDto.forEach(fctDto -> {
             DetailFacture detailFacture = new DetailFacture();
             BigDecimal quantiteFacture = (fctDto.getProduits().getQuantite().subtract(fctDto.getQuantite()));
-            if (quantiteFacture.compareTo(BigDecimal.ZERO)==0 || quantiteFacture.compareTo(BigDecimal.ZERO)==1) {
+            if (quantiteFacture.compareTo(BigDecimal.ZERO) == 0 || quantiteFacture.compareTo(BigDecimal.ZERO) == 1) {
                 fctDto.getProduits().setQuantite(quantiteFacture);
                 produitsListUpdatedQuantite.add(fctDto.getProduits());
                 detailFacture.setProduits(fctDto.getProduits());
@@ -108,7 +119,7 @@ public class FactureServImpl implements FactureService {
                 detailFacture.setLibelleProduit(fctDto.getProduits().getLibell());
                 detailFacture.setCodeProduit(fctDto.getProduits().getCode());
                 detailFacturesList.add(detailFacture);
-            }else{
+            } else {
 
                 new RuntimeException("Quantite produit insufffisante");
             }
@@ -120,34 +131,36 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public List<FactureDto> getListFactureDto() {
-        Acteur acteur=acteurServ.getUserConnected();
-        List<Facture>  factureList=factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(()-> new NotExisteException("Utilisateur n'existe pas"));
-        List<Long> idsFacture=factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
+        Acteur acteur = acteurServ.getUserConnected();
+        List<Facture> factureList = factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(() -> new NotExisteException("Utilisateur n'existe pas"));
+        List<Long> idsFacture = factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
         List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
-        List<FactureDto> factureDtoList=factureMapperService.listEntityFactureToDto(factureList);
+        List<FactureDto> factureDtoList = factureMapperService.listEntityFactureToDto(factureList);
         this.userService.verifUser();
         factureDtoList.forEach(facDto -> {
-          List<DetailFacture> detailFactures1=  detailFactures.stream().filter( df -> df.getFacture().getId().equals(facDto.getId())).collect(Collectors.toList());
+            List<DetailFacture> detailFactures1 = detailFactures.stream().filter(df -> df.getFacture().getId().equals(facDto.getId())).collect(Collectors.toList());
             facDto.setDetailFactures(detailFactureMapperService.ListEntityToDto(detailFactures1));
         });
         return factureDtoList;
     }
+
     @Override
     public List<FactureDto> getListFactureDtoByWord(String word) {
-        Acteur acteur=acteurServ.getUserConnected();
-        List<Facture>  factureList=factureRepo.getListFactureByActeurAndWords(acteur.getId(),word).orElseThrow(()-> new NotExisteException("Utilisateur n'existe pas"));
-        List<Long> idsFacture=factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
+        Acteur acteur = acteurServ.getUserConnected();
+        List<Facture> factureList = factureRepo.getListFactureByActeurAndWords(acteur.getId(), word).orElseThrow(() -> new NotExisteException("Utilisateur n'existe pas"));
+        List<Long> idsFacture = factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
         List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
-        List<FactureDto> factureDtoList=factureMapperService.listEntityFactureToDto(factureList);
+        List<FactureDto> factureDtoList = factureMapperService.listEntityFactureToDto(factureList);
         this.userService.verifUser();
         factureDtoList.forEach(facDto -> {
-            List<DetailFacture> detailFactures1=  detailFactures.stream().filter( df -> df.getFacture().getId().equals(facDto.getId())).collect(Collectors.toList());
+            List<DetailFacture> detailFactures1 = detailFactures.stream().filter(df -> df.getFacture().getId().equals(facDto.getId())).collect(Collectors.toList());
             facDto.setDetailFactures(detailFactureMapperService.ListEntityToDto(detailFactures1));
         });
         return factureDtoList;
     }
+
     @Override
     public List<Facture> getAllFactures() {
         return factureRepo.getListFactureByActeur(acteurServ.getUserConnected().getId()).orElseThrow(() -> new NotExisteException("Facture n'existe pas "));
@@ -164,26 +177,26 @@ public class FactureServImpl implements FactureService {
 
     @Override
     public void deletFacture(Long factureId) {
-      Facture facture = factureRepo.findById(factureId).orElseThrow(()-> new NotExisteException("Facture non existe"));
-      Set<DetailFacture> detailFactureList= detailFactureRepo.getAllByFactureID(factureId).orElseThrow(() -> new NotExisteException("Details factures non existe"));
-      detailFactureRepo.deleteAllById(detailFactureList.stream().map(d ->d.getId()).collect(Collectors.toList()));
-      factureRepo.delete(facture);
+        Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("Facture non existe"));
+        Set<DetailFacture> detailFactureList = detailFactureRepo.getAllByFactureID(factureId).orElseThrow(() -> new NotExisteException("Details factures non existe"));
+        detailFactureRepo.deleteAllById(detailFactureList.stream().map(d -> d.getId()).collect(Collectors.toList()));
+        factureRepo.delete(facture);
 
     }
 
     @Override
     public ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException {
         Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("Facture n'existe pas"));
-        List<DetailFacture> detailFactureList=new ArrayList<>(detailFactureRepo.getAllByFactureID(factureId).get());
+        List<DetailFacture> detailFactureList = new ArrayList<>(detailFactureRepo.getAllByFactureID(factureId).get());
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] bytes;
-        File file= ResourceUtils.getFile("classpath:jasperFiles/factureVenteTemp.jrxml");
+        File file = ResourceUtils.getFile("classpath:jasperFiles/factureVenteTemp.jrxml");
         InputStream input = new FileInputStream(file);
-       // JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
-        JRBeanCollectionDataSource dataSource=new JRBeanCollectionDataSource(detailFactureList);
+        // JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+        JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(detailFactureList);
         // add parametres to pdf file
-        Map<String,Object> paramateres =new HashMap<>();
+        Map<String, Object> paramateres = new HashMap<>();
         paramateres.put("firstName", facture.getClient().getNom());
         paramateres.put("phone", facture.getClient().getNumeroTel());
         paramateres.put("lastNameClient", facture.getClient().getPrenom());
@@ -199,7 +212,7 @@ public class FactureServImpl implements FactureService {
         try {
             BufferedImage image = ImageIO.read(getClass().getResource("/chakerJeux.PNG"));
             paramateres.put("efacture-logo", image);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
         }
 
@@ -212,8 +225,8 @@ public class FactureServImpl implements FactureService {
         /* Using jasperReport object to generate PDF */
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramateres, new JREmptyDataSource());
         // JasperExportManager.exportReportToPdfFile(jasperPrint ,"src/main/resources/FactureEmployees.pdf"); // upload file localy in specific path
-        JasperExportManager.exportReportToPdfStream(jasperPrint,outputStream); // tronsform our pdf file to outputStrem
-        bytes=outputStream.toByteArray(); // tronsform our pdf outputStream to byte[]
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream); // tronsform our pdf file to outputStrem
+        bytes = outputStream.toByteArray(); // tronsform our pdf outputStream to byte[]
         return new ByteArrayInputStream(bytes); // return pdf fil in array input stream
 
     }

@@ -11,4 +11,6 @@ public interface ProduitService {
     Optional<Produits> saveProduit(Produits produits);
     Optional<List<Produits>> saveAllProduit(List<Produits> produits);
     Optional<Set<Produits>> getAllByActeur();
+    void deleteProduit(Long id);
+
 }

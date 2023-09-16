@@ -3,12 +3,12 @@ package com.app.FirstApp.services.produit;
 import com.app.FirstApp.domain.produits.Produits;
 import com.app.FirstApp.repository.produit.ProduitRepo;
 import com.app.FirstApp.services.Acteur.ActeurServ;
+import com.app.FirstApp.services.facture.DetailFactureServ;
+import com.app.FirstApp.services.facture.FactureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class ProduitServImpl implements ProduitService {
@@ -17,6 +17,11 @@ public class ProduitServImpl implements ProduitService {
     private ProduitRepo produitRepo;
     @Autowired
     private ActeurServ acteurServ;
+
+
+
+    @Autowired
+    private DetailFactureServ detailFactureServ;
 
     @Override
     public Optional<Produits> saveProduit(Produits produits) {
@@ -34,4 +39,12 @@ public class ProduitServImpl implements ProduitService {
 
         return produitRepo.getAllByActeurId(acteurServ.getUserConnected().getId());
     }
+
+    @Override
+    public void deleteProduit(Long id) {
+        detailFactureServ.deleteDetailFactureByProduitId(Arrays.asList(id));
+        produitRepo.deleteById(id);
+    }
+
+
 }

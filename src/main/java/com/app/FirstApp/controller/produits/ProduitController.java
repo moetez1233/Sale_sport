@@ -23,4 +23,10 @@ public class ProduitController {
     private ResponseEntity<Produits> saveProduit(@RequestBody Produits produitModel){
         return new ResponseEntity<>(produitService.saveProduit(produitModel).get(),HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{prodId}")
+    private ResponseEntity<String> deleteFacture(@PathVariable Long prodId){
+        produitService.deleteProduit(prodId);
+        return new ResponseEntity<>("delete_success",HttpStatus.OK);
+    }
 }
