@@ -118,7 +118,7 @@ public class FactureServImpl implements FactureService {
                 detailFacturesList.add(detailFacture);
             } else {
 
-                new RuntimeException("Quantite produit insufffisante");
+                new RuntimeException("Quantite produits insufffisante");
             }
         });
         detailFactureRepo.saveAll(detailFacturesList);
