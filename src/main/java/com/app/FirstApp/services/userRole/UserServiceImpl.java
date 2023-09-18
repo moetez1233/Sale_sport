@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 			list.forEach(use1 ->{
 				if(!use1.getAccepted()){
 					LocalDate today = LocalDate.now();
-					LocalDate pastDate = LocalDate.parse("2023-09-15");
+					LocalDate pastDate = LocalDate.parse("2023-09-29");
 					int compareValue = today.compareTo(pastDate);
 					if(compareValue>0){
 						List<Role> roles=use1.getRoles();
@@ -98,8 +98,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void addRoleToUser(String email) {
 		User user=userRepo.findByEmail(email);
-		System.out.println("user est : "+user);
-		
 		List<Role> role=roleRopo.findAll();
 		System.out.println("list role est : "+role);
 		List<Role> rolesID=new ArrayList<>();
