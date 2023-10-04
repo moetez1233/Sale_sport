@@ -1,20 +1,44 @@
 pipeline {
-    agent any 
+    agent any
+
     stages {
-        stage('Build') { 
+        stage('Checkout') {
             steps {
-                echo "Building" 
+                // Checkout your source code from your version control system (e.g., Git)
+                checkout scm
             }
         }
-        stage('Test') { 
+
+        stage('Build') {
             steps {
-                echo "Testing" 
+                // Build your Spring Boot application
+                sh './mvnw clean package' // You may need to customize this for your build tool (e.g., Gradle)
             }
         }
-        stage('Deploy') { 
+
+        stage('Test') {
             steps {
-                echo "Deploying" 
+                // Run tests if you have any
+                sh './mvnw test' // Adjust this command for your project
             }
+        }
+
+        stage('Deploy') {
+            steps {
+                // Deploy your Spring Boot application
+                sh 'java -jar target/app-0.0.1-SNAPSHOT.jar' // Adjust the path to your JAR file
+            }
+        }
+    }
+
+    post {
+        success {
+            // This block is executed if the pipeline succeeds
+            echo 'Deployment successful!'
+        }
+        failure {
+            // This block is executed if the pipeline fails
+            echo 'Deployment failed!'
         }
     }
 }
