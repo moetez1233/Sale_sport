@@ -36,8 +36,13 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
-@Slf4j
 public class FactureServImpl implements FactureService {
     @Autowired
     private FactureRepo factureRepo;
@@ -59,6 +64,24 @@ public class FactureServImpl implements FactureService {
     DetailFactureMapperService detailFactureMapperService;
 
 
+    private static final Logger log = LoggerFactory.getLogger(FactureServImpl.class);
+
+
+    @Override
+    public void writePdfStreamToHttpServletResponse(HttpServletResponse response, ByteArrayInputStream byteArrayInputStream) throws Exception {
+        OutputStream os = response.getOutputStream();
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=facture.pdf");
+        byte[] buffer = new byte[1024];
+        int bytesRead;
+        while ((bytesRead = byteArrayInputStream.read(buffer)) != -1) {
+            os.write(buffer, 0, bytesRead);
+        }
+        os.flush();
+        os.close();
+        byteArrayInputStream.close();
+    }
+
     @Override
     @Transactional
     public FactureDto updateFactureDto(FactureDto factureDto) {
@@ -78,16 +101,14 @@ public class FactureServImpl implements FactureService {
         Facture factureSaved = factureRepo.save(facture);
         List<Produits> produitsListUpdatedQuantite = new ArrayList<>();
         detailFacturesList.forEach(detailFact -> {
-                produitsListUpdatedQuantite.add(detailFact.getProduits());
-                detailFact.setLibelleProduit(detailFact.getProduits().getLibell());
-                detailFact.setCodeProduit(detailFact.getProduits().getCode());
-
+            produitsListUpdatedQuantite.add(detailFact.getProduits());
+            detailFact.setLibelleProduit(detailFact.getProduits().getLibell());
+            detailFact.setCodeProduit(detailFact.getProduits().getCode());
         });
         detailFactureRepo.saveAll(detailFacturesList);
         produitRepo.saveAll(produitsListUpdatedQuantite);
         return factureMapperService.entityFactureToDto(factureSaved);
     }
-
 
     @Override
     @Transactional
@@ -117,8 +138,7 @@ public class FactureServImpl implements FactureService {
                 detailFacture.setCodeProduit(fctDto.getProduits().getCode());
                 detailFacturesList.add(detailFacture);
             } else {
-
-                new RuntimeException("Quantite produits insufffisante");
+                throw new RuntimeException("Quantite produits insuffisante");
             }
         });
         detailFactureRepo.saveAll(detailFacturesList);
@@ -129,7 +149,7 @@ public class FactureServImpl implements FactureService {
     @Override
     public List<FactureDto> getListFactureDto() {
         Acteur acteur = acteurServ.getUserConnected();
-        List<Facture> factureList = factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(() -> new NotExisteException("Utilisateur"+ acteur.getEmail()+"4 n'existe pas"));
+        List<Facture> factureList = factureRepo.getListFactureByActeur(acteur.getId()).orElseThrow(() -> new NotExisteException("Utilisateur"+ acteur.getEmail()+" n'existe pas"));
         List<Long> idsFacture = factureList.stream().map(f -> f.getId()).collect(Collectors.toList());
         List<DetailFacture> detailFactures = detailFactureRepo.getAllByListIdsFacture(idsFacture).orElseThrow(() -> new NotExisteException("Details facture n'existe pas "));
 
@@ -178,28 +198,29 @@ public class FactureServImpl implements FactureService {
         Set<DetailFacture> detailFactureList = detailFactureRepo.getAllByFactureID(factureId).orElseThrow(() -> new NotExisteException("Details factures non existe"));
         detailFactureRepo.deleteAllById(detailFactureList.stream().map(d -> d.getId()).collect(Collectors.toList()));
         factureRepo.delete(facture);
-
     }
 
     @Override
-    public ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException {
+    public ByteArrayInputStream exportFactureEmploy(Long factureId) throws JRException, IOException {
         Facture facture = factureRepo.findById(factureId).orElseThrow(() -> new NotExisteException("facture : "+factureId+" n'existe pas"));
         List<DetailFacture> detailFactureList = new ArrayList<>(detailFactureRepo.getAllByFactureID(factureId).get());
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         byte[] bytes;
-        File file = ResourceUtils.getFile("classpath:jasperFiles/factureVenteTemp.jrxml");
-        InputStream input = new FileInputStream(file);
+        InputStream input = this.getClass().getResourceAsStream("/jasperFiles/factureVenteTemp.jrxml");
+
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(detailFactureList);
         Map<String, Object> paramateres = new HashMap<>();
-        getParams(paramateres,facture ,dataSource);
+        getParams(paramateres, facture, dataSource);
+
         try {
-            BufferedImage image = ImageIO.read(getClass().getResource("/chakerJeux.PNG"));
+            // Load the image using getResourceAsStream
+            InputStream imageInputStream = this.getClass().getResourceAsStream("/chakerJeux.PNG");
+            BufferedImage image = ImageIO.read(imageInputStream);
             paramateres.put("efacture-logo", image);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error("Error loading image: " + e.getMessage());
         }
-
 
         JasperDesign jasperDesign = JRXmlLoader.load(input);
 
@@ -208,30 +229,13 @@ public class FactureServImpl implements FactureService {
 
         /* Using jasperReport object to generate PDF */
         JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, paramateres, new JREmptyDataSource());
-        // JasperExportManager.exportReportToPdfFile(jasperPrint ,"src/main/resources/FactureEmployees.pdf"); // upload file localy in specific path
-        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream); // tronsform our pdf file to outputStrem
-        bytes = outputStream.toByteArray(); // tronsform our pdf outputStream to byte[]
-        return new ByteArrayInputStream(bytes); // return pdf fil in array input stream
-
+        JasperExportManager.exportReportToPdfStream(jasperPrint, outputStream);
+        bytes = outputStream.toByteArray();
+        return new ByteArrayInputStream(bytes);
     }
 
-    // tronsform arrayInput stream to page web
-    @Override
-    public void writePdfStreamToHttpServletResponse(HttpServletResponse response, ByteArrayInputStream byteArrayInputStream) throws Exception {
-        OutputStream os = response.getOutputStream();
-//        response.setHeader("content-disposition", "inline; filename=file.pdf");
-        response.setContentType("application/pdf; name=\"MyFile.pdf\"");
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setHeader("Cache-Control", "private, must-revalidate, post-check=0, pre-check=0, max-age=1");
-        response.setHeader("Pragma", "public");
-        response.setHeader("Content-Disposition", "attachment; filename=\"file_from_server.pdf\"");
-        byte[] pdfAsStream = new byte[byteArrayInputStream.available()];
-        byteArrayInputStream.read(pdfAsStream);
-        os.write(pdfAsStream);
-        os.close();
-    }
-    void getParams(Map<String, Object> paramateres,Facture facture,JRBeanCollectionDataSource dataSource){
 
+    void getParams(Map<String, Object> paramateres, Facture facture, JRBeanCollectionDataSource dataSource){
         paramateres.put("firstName", facture.getClient().getNom());
         paramateres.put("phone", facture.getClient().getNumeroTel());
         paramateres.put("lastNameClient", facture.getClient().getPrenom());
@@ -242,7 +246,5 @@ public class FactureServImpl implements FactureService {
         paramateres.put("prixTotal", facture.getPrixTotale());
         paramateres.put("collectionBeanParam", dataSource);
         paramateres.put("clientId", facture.getClient().getId());
-        paramateres.put("adressClient", facture.getClient().getAdress());
-    }
-
+        paramateres.put("adressClient", facture.getClient().getAdress());    }
 }

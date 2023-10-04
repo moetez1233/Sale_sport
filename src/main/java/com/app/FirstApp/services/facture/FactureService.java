@@ -8,6 +8,7 @@ import net.sf.jasperreports.engine.JRException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,7 +21,7 @@ public interface FactureService {
     List<Facture> getAllFactures();
     String getNumeroFacture(Long acteurId);
     void deletFacture(Long factureId);
-    ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException;
+    ByteArrayInputStream exportFactureEmploy(Long factureId) throws FileNotFoundException, JRException, IOException;
     void writePdfStreamToHttpServletResponse(HttpServletResponse response, ByteArrayInputStream byteArrayInputStream) throws Exception;
 
 

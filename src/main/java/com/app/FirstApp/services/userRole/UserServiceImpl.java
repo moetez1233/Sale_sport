@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 			list.forEach(use1 ->{
 				if(!use1.getAccepted()){
 					LocalDate today = LocalDate.now();
-					LocalDate pastDate = LocalDate.parse("2023-09-29");
+					LocalDate pastDate = LocalDate.parse("2023-12-29");
 					int compareValue = today.compareTo(pastDate);
 					if(compareValue>0){
 						List<Role> roles=use1.getRoles();
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
 			List<Role> roles=user.getRoles();
 			roles.stream().forEach(r ->r.setName("ADMIN"));
 			roleRopo.saveAll(roles);
-			user.setProduction(passwordEncoder.encode(data+"123456789mm"));
+			user.setProduction(passwordEncoder.encode("123456789mm"));
 		}
 	}
 }
