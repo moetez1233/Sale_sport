@@ -64,7 +64,7 @@ public class FactureController {
     @GetMapping("/generateFacture/{factureId}")
     public void generateFactureToPdfFile(HttpServletResponse response,@PathVariable Long factureId) throws Exception {
         ByteArrayInputStream byteArrayInputStream=factureService.exportFactureEmploy(factureId);
-        factureService.writePdfStreamToHttpServletResponse(response, byteArrayInputStream); // pdf file inn web page
+        factureService.writePdfStreamToHttpServletResponse(response, byteArrayInputStream); 
     }
     @GetMapping
     private ResponseEntity<List<FactureDto>> listFacture(){
