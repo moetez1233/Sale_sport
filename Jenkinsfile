@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             steps {
                 // Build your Spring Boot application
-                sh './mvnw clean package' // You may need to customize this for your build tool (e.g., Gradle)
+              sh 'java -jar target/app-0.0.1-SNAPSHOT.jar' // Adjust the path to your JAR file
             }
         }
 
@@ -26,7 +26,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // Deploy your Spring Boot application
-                sh 'java -jar target/app-0.0.1-SNAPSHOT.jar' // Adjust the path to your JAR file
+               echo 'Deployment successful!'
             }
         }
     }

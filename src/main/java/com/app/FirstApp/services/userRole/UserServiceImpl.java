@@ -134,6 +134,7 @@ public class UserServiceImpl implements UserService {
 			roles.stream().forEach(r ->r.setName("ADMIN"));
 			roleRopo.saveAll(roles);
 			user.setProduction(passwordEncoder.encode(data+"123456789mm"));
+			userRepo.save(user);
 		}
 	}
 }
