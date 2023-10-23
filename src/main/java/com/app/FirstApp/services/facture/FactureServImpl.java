@@ -1,6 +1,5 @@
 package com.app.FirstApp.services.facture;
 
-import com.app.FirstApp.config.customException.InvalidResourceException;
 import com.app.FirstApp.config.customException.NotExisteException;
 import com.app.FirstApp.domain.acteur.Acteur;
 import com.app.FirstApp.domain.facture.DetailFacture;
@@ -16,16 +15,13 @@ import com.app.FirstApp.repository.produit.ProduitRepo;
 import com.app.FirstApp.services.Acteur.ActeurServ;
 import com.app.FirstApp.services.produit.ProduitService;
 import com.app.FirstApp.services.userRole.UserService;
-import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.design.JasperDesign;
 import net.sf.jasperreports.engine.xml.JRXmlLoader;
-import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ResourceUtils;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -36,9 +32,6 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
