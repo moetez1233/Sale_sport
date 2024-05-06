@@ -32,7 +32,7 @@ public class ManageController {
 
     @GetMapping("/testDeploy")
     public ResponseEntity<String> testDeploy(){
-       return new ResponseEntity<>("succes depoloy", HttpStatus.OK);
+       return new ResponseEntity<>("succes depoloy  dev profile ", HttpStatus.OK);
     }
 
     @GetMapping("/{name}")
